@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gourmet Choice - Price Comparison</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for Elegant Typography -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Infinite Scrolling Background -->
+    <div class="background-container">
+        <div class="scrolling-bg"></div>
+        <div class="scrolling-bg"></div>
+    </div>
+
+    <!-- Main Container with Glassmorphism -->
+    <div class="app-container">
+
+        <header>
+            <div class="logo">
+                <h1>Gourmet Choice</h1>
+                <p>Compare & Choose the Best</p>
+            </div>
+        </header>
+
+        <main>
+            <!-- Navigation / Selection Area -->
+            <section class="selection-panel">
+                <div class="input-group">
+                    <label for="main-category"><i class="fas fa-utensils"></i> Select Category</label>
+                    <select id="main-category">
+                        <option value="" disabled selected>Choose Food Category...</option>
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+
+                <div class="input-group disabled" id="sub-category-group">
+                    <label for="sub-category"><i class="fas fa-list-alt"></i> Select Item Type</label>
+                    <select id="sub-category" disabled>
+                        <option value="" disabled selected>Select Sub Category...</option>
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+
+                <div class="input-group disabled" id="item-type-group">
+                    <label for="item-type"><i class="fas fa-search"></i> Select Product</label>
+                    <select id="item-type" disabled>
+                        <option value="" disabled selected>Select Product Type...</option>
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+            </section>
+
+            <!-- Product Chart / Listing Area -->
+            <section id="product-display" class="product-display hidden">
+                <div class="chart-header">
+                    <h2>Available Options</h2>
+                    <span class="instruction">Select items to compare details</span>
+                </div>
+                <div class="product-grid" id="product-grid">
+                    <!-- Products injected here -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Comparison & Action Floating Bar -->
+        <footer id="action-bar" class="action-bar hidden">
+            <div class="selected-summary">
+                <span id="selected-count">0</span> items selected for comparison
+            </div>
+            <div class="action-buttons">
+                <button id="btn-compare" class="btn btn-secondary">Compare</button>
+                <button id="btn-confirm" class="btn btn-primary">Confirm Order <i
+                        class="fas fa-check-circle"></i></button>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Comparison Modal -->
+    <div id="comparison-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Compare Products</h2>
+            <div id="comparison-container" class="comparison-container">
+                <!-- Comparison table/grid injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    <!-- Product Detail Popup -->
+    <div id="product-detail-modal" class="modal hidden">
+        <div class="modal-content product-detail-content">
+            <span class="close-detail-modal close-modal">&times;</span>
+            <div class="detail-image-container">
+                <img id="detail-image" src="" alt="Product Image">
+            </div>
+            <div class="detail-body">
+                <h2 id="detail-name">Product Name</h2>
+                <p class="detail-price" id="detail-price">Rs. 0</p>
+                <div class="detail-info">
+                    <p><strong>Origin/Type:</strong> <span id="detail-origin"></span></p>
+                    <p><strong>Freshness/Condition:</strong> <span id="detail-freshness"></span></p>
+                    <p><strong>Description:</strong> Premium quality selected just for you.</p>
+                </div>
+                <button id="btn-detail-confirm" class="btn btn-primary">Confirm Order <i
+                        class="fas fa-check-circle"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Universal Product Entry Form Modal -->
+    <div id="product-entry-modal" class="modal hidden">
+        <div class="modal-content entry-form-content">
+            <span class="close-entry-modal close-modal">&times;</span>
+            <h2>Add New Product</h2>
+            <form id="product-entry-form">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="entry-category">Category</label>
+                        <select id="entry-category" required>
+                            <option value="" disabled selected>Select Category</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="entry-sub-category">Sub Category</label>
+                        <select id="entry-sub-category" required disabled>
+                            <option value="" disabled selected>Select Sub Category</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="entry-item-type">Product Type</label>
+                        <select id="entry-item-type" required disabled>
+                            <option value="" disabled selected>Select Product Type</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="entry-brand">Brand Name</label>
+                        <input type="text" id="entry-brand" placeholder="e.g. Nike, Chef Special" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="entry-size">Size / Qty</label>
+                        <input type="text" id="entry-size" placeholder="e.g. Large, 1kg, 42" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="entry-phone">Phone No</label>
+                        <input type="tel" id="entry-phone" placeholder="+123..." required>
+                    </div>
+                    <div class="input-group">
+                        <label for="entry-whatsapp">WhatsApp No</label>
+                        <input type="tel" id="entry-whatsapp" placeholder="+123..." required>
+                    </div>
+                    <div class="input-group full-width">
+                        <label for="entry-address">Address</label>
+                        <input type="text" id="entry-address" placeholder="Shop #, Street, City" required>
+                    </div>
+                    <div class="input-group full-width">
+                        <label for="entry-website">Website</label>
+                        <input type="url" id="entry-website" placeholder="https://example.com">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 1.5rem; width: 100%;">Add
+                    Product</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Floating Add Button -->
+    <button id="btn-open-entry" class="floating-add-btn" title="Add Product">
+        <i class="fas fa-plus"></i>
+    </button>
+
+</body>
+
+</html>
