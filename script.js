@@ -393,7 +393,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Form Submit
     entryForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        alert("New product added successfully!\n(This is a prototype demo)");
+        const variety = document.getElementById('entry-variety').value;
+        const price = document.getElementById('entry-price').value;
+        alert(`New product added successfully!\nVariety: ${variety}\nPrice: Rs. ${price}\n(This is a prototype demo)`);
         entryModal.classList.add('hidden');
         entryModal.classList.remove('visible');
         entryForm.reset();
