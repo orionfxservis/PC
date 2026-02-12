@@ -809,3 +809,175 @@ option {
         opacity: 1;
     }
 }
+
+/* --- Admin Panel Styles --- */
+
+.admin-login-btn {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #aaa;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1.2rem;
+    z-index: 100;
+}
+
+.admin-login-btn:hover {
+    color: #D4AF37;
+    border-color: #D4AF37;
+    transform: rotate(15deg);
+}
+
+.login-content {
+    max-width: 400px;
+    text-align: center;
+}
+
+.dashboard-content {
+    max-width: 1200px;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+}
+
+.dashboard-header {
+    background: #111;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+}
+
+.dashboard-header h2 {
+    margin: 0;
+    text-align: left;
+    font-size: 1.8rem;
+}
+
+.dashboard-tabs {
+    display: flex;
+    background: #1a1a1a;
+    border-bottom: 1px solid #333;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 1rem;
+    background: transparent;
+    border: none;
+    color: #888;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.tab-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+
+.tab-btn.active {
+    color: #D4AF37;
+    border-bottom: 3px solid #D4AF37;
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.admin-tab {
+    display: none;
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+}
+
+.admin-tab.active {
+    display: block;
+    animation: fadeIn 0.3s;
+}
+
+/* Admin Table */
+.table-container {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.admin-table th,
+.admin-table td {
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-table th {
+    color: #D4AF37;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.admin-table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.admin-table td:last-child {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.action-icon {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    margin-left: 10px;
+    padding: 5px;
+    transition: color 0.3s;
+}
+
+.edit-icon {
+    color: #3498db;
+}
+
+.edit-icon:hover {
+    color: #fff;
+}
+
+.delete-icon {
+    color: #e74c3c;
+}
+
+.delete-icon:hover {
+    color: #fff;
+}
+
+/* Adjustments for Form inside Dashboard */
+#tab-add .entry-form-content {
+    max-width: 100%;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+}
+
+#tab-add h3 {
+    text-align: center;
+    color: #D4AF37;
+    margin-bottom: 2rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+}

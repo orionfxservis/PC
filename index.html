@@ -119,6 +119,15 @@
                 <div class="detail-info">
                     <p><strong>Origin/Type:</strong> <span id="detail-origin"></span></p>
                     <p><strong>Freshness/Condition:</strong> <span id="detail-freshness"></span></p>
+                    <p id="detail-city-container"><strong>City:</strong> <span id="detail-city"></span></p>
+                    <hr style="margin: 10px 0; border: 0; border-top: 1px solid #eee;">
+                    <p id="detail-phone-container"><strong>Phone:</strong> <span id="detail-phone"></span></p>
+                    <p id="detail-whatsapp-container"><strong>WhatsApp:</strong> <span id="detail-whatsapp"></span></p>
+                    <p id="detail-delivery-container"><strong>Delivery No:</strong> <span id="detail-delivery"></span>
+                    </p>
+                    <p id="detail-address-container"><strong>Address:</strong> <span id="detail-address"></span></p>
+                    <p id="detail-website-container"><strong>Website:</strong> <a id="detail-website" href="#"
+                            target="_blank">Visit Link</a></p>
                     <p><strong>Description:</strong> Premium quality selected just for you.</p>
                 </div>
                 <button id="btn-detail-confirm" class="btn btn-primary">Confirm Order <i
@@ -127,79 +136,137 @@
         </div>
     </div>
 
-    <!-- Universal Product Entry Form Modal -->
-    <div id="product-entry-modal" class="modal hidden">
-        <div class="modal-content entry-form-content">
-            <span class="close-entry-modal close-modal">&times;</span>
-            <h2>Add New Product</h2>
-            <form id="product-entry-form">
-                <div class="form-grid">
-                    <div class="input-group">
-                        <label for="entry-category">Category</label>
-                        <select id="entry-category" required>
-                            <option value="" disabled selected>Select Category</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label for="entry-sub-category">Sub Category</label>
-                        <select id="entry-sub-category" required disabled>
-                            <option value="" disabled selected>Select Sub Category</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label for="entry-item-type">Product Type</label>
-                        <select id="entry-item-type" required disabled>
-                            <option value="" disabled selected>Select Product Type</option>
-                        </select>
-                    </div>
+    <!-- Admin Floating Button (Top Right) -->
+    <button id="btn-admin-login" class="admin-login-btn" title="Admin Panel">
+        <i class="fas fa-user-shield"></i>
+    </button>
 
-                    <div class="input-group">
-                        <label for="entry-variety">Product Variety</label>
-                        <input type="text" id="entry-variety" placeholder="e.g. Spicy, Sugar-free" required>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="entry-price">Price (Rs)</label>
-                        <input type="number" id="entry-price" placeholder="e.g. 1500" required>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="entry-size">Size / Qty</label>
-                        <input type="text" id="entry-size" placeholder="e.g. Large, 1kg, 42" required>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="entry-brand">Brand Name</label>
-                        <input type="text" id="entry-brand" placeholder="e.g. Nike, Chef Special" required>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="entry-phone">Phone No</label>
-                        <input type="tel" id="entry-phone" placeholder="+123..." required>
-                    </div>
-                    <div class="input-group">
-                        <label for="entry-whatsapp">WhatsApp No</label>
-                        <input type="tel" id="entry-whatsapp" placeholder="+123..." required>
-                    </div>
-                    <div class="input-group full-width">
-                        <label for="entry-address">Address</label>
-                        <input type="text" id="entry-address" placeholder="Shop #, Street, City" required>
-                    </div>
-                    <div class="input-group full-width">
-                        <label for="entry-website">Website</label>
-                        <input type="url" id="entry-website" placeholder="https://example.com">
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary" style="margin-top: 1.5rem; width: 100%;">Add
-                    Product</button>
-            </form>
+    <!-- Admin Login Modal -->
+    <div id="admin-login-modal" class="modal hidden">
+        <div class="modal-content login-content">
+            <span class="close-modal close-admin-login">&times;</span>
+            <h2>Admin Access</h2>
+            <div class="input-group">
+                <label>Enter PIN</label>
+                <input type="password" id="admin-pin" placeholder="****">
+            </div>
+            <button id="btn-submit-login" class="btn btn-primary full-width">Login</button>
         </div>
     </div>
 
-    <!-- Floating Add Button -->
-    <button id="btn-open-entry" class="floating-add-btn" title="Add Product">
-        <i class="fas fa-plus"></i>
-    </button>
+    <!-- Admin Dashboard Modal (Full Screen-ish) -->
+    <div id="admin-dashboard-modal" class="modal hidden">
+        <div class="modal-content dashboard-content">
+            <div class="dashboard-header">
+                <h2>Admin Dashboard</h2>
+                <button id="btn-admin-logout" class="btn btn-secondary btn-sm">Logout</button>
+                <span class="close-modal close-admin-dashboard">&times;</span>
+            </div>
+
+            <div class="dashboard-tabs">
+                <button class="tab-btn active" onclick="switchAdminTab('manage')">Manage Products</button>
+                <button class="tab-btn" onclick="switchAdminTab('add')">Add New Product</button>
+            </div>
+
+            <!-- Tab 1: Manage Products -->
+            <div id="tab-manage" class="admin-tab active">
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-product-table">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab 2: Add/Edit Product Form (Moved here) -->
+            <div id="tab-add" class="admin-tab">
+                <h3 id="form-title">Add New Product</h3>
+                <form id="product-entry-form">
+                    <input type="hidden" id="edit-id"> <!-- Hidden ID for Editing -->
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label for="entry-category">Category</label>
+                            <input type="text" id="entry-category" list="category-list"
+                                placeholder="Select or Type New..." required>
+                            <datalist id="category-list">
+                                <!-- Populated by JS -->
+                            </datalist>
+                        </div>
+                        <div class="input-group">
+                            <label for="entry-sub-category">Sub Category</label>
+                            <input type="text" id="entry-sub-category" list="sub-category-list"
+                                placeholder="Select or Type New..." required>
+                            <datalist id="sub-category-list">
+                                <!-- Populated by JS -->
+                            </datalist>
+                        </div>
+                        <div class="input-group">
+                            <label for="entry-item-type">Product Type</label>
+                            <input type="text" id="entry-item-type" list="item-type-list"
+                                placeholder="Select or Type New..." required>
+                            <datalist id="item-type-list">
+                                <!-- Populated by JS -->
+                            </datalist>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="entry-variety">Product Variety</label>
+                            <input type="text" id="entry-variety" placeholder="e.g. Spicy, Sugar-free" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="entry-price">Price (Rs)</label>
+                            <input type="number" id="entry-price" placeholder="e.g. 1500" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="entry-size">Size / Qty</label>
+                            <input type="text" id="entry-size" placeholder="e.g. Large, 1kg, 42" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="entry-brand">Brand Name</label>
+                            <input type="text" id="entry-brand" placeholder="e.g. Nike, Chef Special" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="entry-phone">Phone No</label>
+                            <input type="tel" id="entry-phone" placeholder="+123..." required>
+                        </div>
+                        <div class="input-group">
+                            <label for="entry-whatsapp">WhatsApp No</label>
+                            <input type="tel" id="entry-whatsapp" placeholder="+123..." required>
+                        </div>
+                        <div class="input-group">
+                            <label for="entry-delivery">Home Delivery No</label>
+                            <input type="tel" id="entry-delivery" placeholder="+123..." required>
+                        </div>
+                        <div class="input-group full-width">
+                            <label for="entry-address">Address</label>
+                            <input type="text" id="entry-address" placeholder="Shop #, Street, City" required>
+                        </div>
+                        <div class="input-group full-width">
+                            <label for="entry-website">Website</label>
+                            <input type="url" id="entry-website" placeholder="https://example.com">
+                        </div>
+                    </div>
+                    <button type="submit" id="btn-save-product" class="btn btn-primary"
+                        style="margin-top: 1.5rem; width: 100%;">Save Product</button>
+                    <button type="button" id="btn-cancel-edit" class="btn btn-secondary hidden"
+                        style="margin-top: 0.5rem; width: 100%;">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- Location Permission Modal -->
     <div id="location-modal" class="modal">

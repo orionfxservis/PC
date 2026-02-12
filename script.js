@@ -1,112 +1,20 @@
-// Mock Data with 3 Levels: Main Category -> Sub Category -> Item Type -> Products
-const foodData = {
-    "Food": {
-        "Fast Food": {
-            "Burger": [
-                { id: 301, name: "Zinger Burger", price: "350", origin: "Chef Special", freshness: "Hot & Crispy" },
-                { id: 302, name: "Beef Burger", price: "400", origin: "Grill House", freshness: "Juicy" }
-            ],
-            "Club Sandwich": [
-                { id: 303, name: "Club Sandwich", price: "300", origin: "Classic Layer", freshness: "Toasted" },
-                { id: 304, name: "BBQ Sandwich", price: "350", origin: "Smokehouse", freshness: "Smoky" }
-            ],
-            "Broast": [
-                { id: 305, name: "Chicken Broast (Qtr)", price: "450", origin: "Crispy Fry", freshness: "Golden" },
-                { id: 306, name: "Spicy Broast", price: "480", origin: "Hot & Spicy", freshness: "Fresh Fried" }
-            ],
-            "Pizza": [
-                { id: 307, name: "Chicken Fajita", price: "1200", origin: "Italiano", freshness: "Cheesy" },
-                { id: 308, name: "Pepperoni", price: "1300", origin: "NY Style", freshness: "Hot" }
-            ]
-        },
-        "Desi Cuisine": {
-            "Biryani": [
-                { id: 401, name: "Chicken Biryani", price: "300", origin: "Karachi Spice", freshness: "Steaming Hot", city: "Karachi" },
-                { id: 402, name: "Beef Biryani", price: "400", origin: "Traditional", freshness: "Aromatic", city: "Lahore" }
-            ],
-            "Haleem": [
-                { id: 403, name: "Special Haleem", price: "250", origin: "Slow Cooked", freshness: "Garnished", city: "Karachi" },
-                { id: 404, name: "Shahi Haleem", price: "350", origin: "Royal Recipe", freshness: "Premium", city: "Lahore" }
-            ],
-            "Karahi": [
-                { id: 405, name: "Chicken Karahi", price: "1500", origin: "Peshawari", freshness: "Fresh Made" }
-            ]
-        }
-    },
-    "Electronics": {
-        "Mobile Phones": {
-            "Apple": [
-                { id: 501, name: "iPhone 15 Pro", price: "450000", origin: "USA", freshness: "Brand New" },
-                { id: 502, name: "iPhone 14", price: "250000", origin: "USA", freshness: "Refurbished" }
-            ],
-            "Samsung": [
-                { id: 503, name: "Galaxy S24 Ultra", price: "400000", origin: "Korea", freshness: "Brand New" },
-                { id: 504, name: "Galaxy A55", price: "120000", origin: "Vietnam", freshness: "New" }
-            ]
-        },
-        "Laptops": {
-            "Gaming": [
-                { id: 505, name: "ASUS ROG Strix", price: "600000", origin: "Taiwan", freshness: "High Perf" },
-                { id: 506, name: "MSI Raider", price: "550000", origin: "China", freshness: "RGB" }
-            ],
-            "Business": [
-                { id: 507, name: "MacBook Air M3", price: "350000", origin: "USA", freshness: "Sleek" },
-                { id: 508, name: "Dell XPS 13", price: "320000", origin: "USA", freshness: "Ultrabook" }
-            ]
-        }
-    },
-    "Cars": {
-        "Sedan": {
-            "Toyota": [
-                { id: 601, name: "Corolla Altis", price: "7500000", origin: "Japan/Local", freshness: "New 2025" },
-                { id: 602, name: "Yaris", price: "5500000", origin: "Local", freshness: "New 2024" }
-            ],
-            "Honda": [
-                { id: 603, name: "Civic RS", price: "9500000", origin: "Local", freshness: "Turbo" },
-                { id: 604, name: "City", price: "5800000", origin: "Local", freshness: "Comfort" }
-            ]
-        },
-        "SUV": {
-            "KIA": [
-                { id: 605, name: "Sportage AWD", price: "8500000", origin: "Korea/Local", freshness: "Popular" },
-                { id: 606, name: "Sorento", price: "11000000", origin: "Korea", freshness: "7 Seater" }
-            ],
-            "Hyundai": [
-                { id: 607, name: "Tucson", price: "8200000", origin: "Korea/Local", freshness: "Modern" }
-            ]
-        }
-    },
-    "Cloths": {
-        "Men": {
-            "Formal": [
-                { id: 701, name: "3-Piece Suit", price: "25000", origin: "Italian Fabric", freshness: "Tailored" },
-                { id: 702, name: "Cotton Shirt", price: "3500", origin: "Local Brand", freshness: "Crisp" }
-            ],
-            "Casual": [
-                { id: 703, name: "Denim Jeans", price: "4000", origin: "Export Quality", freshness: "Rugged" },
-                { id: 704, name: "Polo T-Shirt", price: "2000", origin: "Cotton", freshness: "Soft" }
-            ]
-        },
-        "Women": {
-            "Eastern": [
-                { id: 705, name: "Embroidered Kurti", price: "5000", origin: "Designer", freshness: "Chic" },
-                { id: 706, name: "3-Piece Lawn", price: "6500", origin: "Summer Collection", freshness: "Vibrant" }
-            ],
-            "Western": [
-                { id: 707, name: "Maxi Dress", price: "8000", origin: "Imported", freshness: "Elegant" },
-                { id: 708, name: "Leather Jacket", price: "12000", origin: "Genuine Leather", freshness: "Stylish" }
-            ]
-        }
-    }
-};
+// Global Configurations
+// IMPORTANT: Replace this URL with your actual Google Apps Script Web App URL after deployment
+const API_URL = "https://script.google.com/macros/s/AKfycbwDHQLoh-ANYMye-FtQfvyeHPb4DU24sy4-emzuTeK-3miC4LjZ_Etw2XHPR2imRr18bA/exec";
+
+let foodData = {};
+let rawProductData = [];
 
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Selectors ---
     const mainCategorySelect = document.getElementById('main-category');
     const subCategorySelect = document.getElementById('sub-category');
     const itemTypeSelect = document.getElementById('item-type');
+    const productVarietySelect = document.getElementById('product-variety');
 
     const subCategoryGroup = document.getElementById('sub-category-group');
     const itemTypeGroup = document.getElementById('item-type-group');
+    const productVarietyGroup = document.getElementById('product-variety-group');
 
     const productDisplay = document.getElementById('product-display');
     const productGrid = document.getElementById('product-grid');
@@ -114,81 +22,164 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectedCountSpan = document.getElementById('selected-count');
     const btnConfirm = document.getElementById('btn-confirm');
 
-    // Location Modal Elements
+    // Modals
     const locationModal = document.getElementById('location-modal');
     const btnCheckLocation = document.getElementById('btn-check-location');
+    const detailModal = document.getElementById('product-detail-modal');
+    const closeDetail = document.querySelector('.close-detail-modal');
+    const comparisonModal = document.getElementById('comparison-modal');
+    const comparisonContainer = document.getElementById('comparison-container');
+    const closeStart = document.querySelector('.close-modal');
 
-    // Check Location on Load
+    // Detail Modal Elements
+    const detailName = document.getElementById('detail-name');
+    const detailPrice = document.getElementById('detail-price');
+    const detailOrigin = document.getElementById('detail-origin');
+    const detailFreshness = document.getElementById('detail-freshness');
+    const detailCity = document.getElementById('detail-city');
+    const detailPhone = document.getElementById('detail-phone');
+    const detailWhatsapp = document.getElementById('detail-whatsapp');
+    const detailDelivery = document.getElementById('detail-delivery');
+    const detailAddress = document.getElementById('detail-address');
+    const detailWebsite = document.getElementById('detail-website');
+    const detailImage = document.getElementById('detail-image');
+    const btnDetailConfirm = document.getElementById('btn-detail-confirm');
+
+    let currentDetailItem = null;
+    let selectedItems = new Set();
+
+
+    // --- Admin Panel Elements ---
+    const btnAdminLogin = document.getElementById('btn-admin-login');
+    const adminLoginModal = document.getElementById('admin-login-modal');
+    const closeAdminLogin = document.querySelector('.close-admin-login');
+    const btnSubmitLogin = document.getElementById('btn-submit-login');
+    const adminPinInput = document.getElementById('admin-pin');
+
+    const adminDashboardModal = document.getElementById('admin-dashboard-modal');
+    const closeAdminDashboard = document.querySelector('.close-admin-dashboard');
+    const btnAdminLogout = document.getElementById('btn-admin-logout');
+
+    const adminTabManage = document.getElementById('tab-manage');
+    const adminTabAdd = document.getElementById('tab-add');
+    const adminProductTable = document.getElementById('admin-product-table');
+
+    // --- Entry Form Elements (Now inside Admin Dashboard) ---
+    const entryForm = document.getElementById('product-entry-form');
+    const entryCategoryInput = document.getElementById('entry-category');
+    const entrySubCategoryInput = document.getElementById('entry-sub-category');
+    const entryItemTypeInput = document.getElementById('entry-item-type');
+    const categoryList = document.getElementById('category-list');
+    const subCategoryList = document.getElementById('sub-category-list');
+    const itemTypeList = document.getElementById('item-type-list');
+
+    const editIdInput = document.getElementById('edit-id');
+    const btnSaveProduct = document.getElementById('btn-save-product');
+    const btnCancelEdit = document.getElementById('btn-cancel-edit');
+    const formTitle = document.getElementById('form-title');
+
+
+    // --- Initialization ---
     checkLocationPermission();
+    fetchProducts();
 
+
+    // --- Location Logic ---
     function checkLocationPermission() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition, showError);
         } else {
-            console.log("Geolocation is not supported by this browser.");
-            // Optionally handle this case, maybe default to a city
+            console.log("Geolocation is not supported.");
         }
     }
 
     function showPosition(position) {
-        // Location allowed
-        console.log("User Location:", position.coords.latitude, position.coords.longitude);
         locationModal.classList.add('hidden');
         locationModal.classList.remove('visible');
-
-        // Enhance UI to show detected location (Simulated)
-        const userCity = "Karachi"; // Simulated Reverse Geocoding
-        console.log("Detected City:", userCity);
-
-        // Optional: Update UI to show 'Deals in Karachi'
         const headerTitle = document.querySelector('.logo p');
-        if (headerTitle) headerTitle.textContent = `Compare & Choose in ${userCity}`;
+        if (headerTitle) headerTitle.textContent = `Compare & Choose in Karachi`;
     }
 
     function showError(error) {
-        switch (error.code) {
-            case error.PERMISSION_DENIED:
-                locationModal.classList.remove('hidden');
-                locationModal.classList.add('visible');
-                break;
-            case error.POSITION_UNAVAILABLE:
-            case error.TIMEOUT:
-            case error.UNKNOWN_ERROR:
-                // For other errors, maybe just log or show a different message.
-                // For now, we strictly enforce "Turn On Location" as requested.
-                locationModal.classList.remove('hidden');
-                locationModal.classList.add('visible');
-                break;
+        if (error.code === error.PERMISSION_DENIED) {
+            locationModal.classList.remove('hidden');
+            locationModal.classList.add('visible');
         }
     }
 
     btnCheckLocation.addEventListener('click', () => {
-        // Retry logic
         checkLocationPermission();
-        // If the user has permanently blocked it, they need to change browser settings.
-        // This button acts as a "Try Again" or prompt to refresh.
-        // For better UX, we might reload the page or instruct them.
         alert("Please ensure Location is enabled in your browser settings, then click OK.");
         window.location.reload();
     });
 
-    let selectedItems = new Set();
 
-    // Populate Main Categories
-    for (const category in foodData) {
-        if (category === "dummymode") continue;
-        const option = document.createElement('option');
-        option.value = category;
-        option.textContent = category;
-        mainCategorySelect.appendChild(option);
+    // --- Data Fetching ---
+    async function fetchProducts() {
+        if (API_URL === "INSERT_YOUR_WEB_APP_URL_HERE") {
+            console.warn("API URL not set.");
+            initializeDropdowns();
+            return;
+        }
+
+        try {
+            // Add timestamp to prevent caching
+            const response = await fetch(API_URL + "?t=" + Date.now());
+            const data = await response.json();
+            rawProductData = data;
+            processData(data);
+            initializeDropdowns();
+            renderAdminTable(); // Refresh admin table if open
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
     }
 
-    // Main Category Change Listener
+    function processData(data) {
+        foodData = {};
+        data.forEach(item => {
+            const main = item['MainCategory'];
+            const sub = item['SubCategory'];
+            const type = item['ItemType'];
+
+            if (!foodData[main]) foodData[main] = {};
+            if (!foodData[main][sub]) foodData[main][sub] = {};
+            if (!foodData[main][sub][type]) foodData[main][sub][type] = [];
+
+            foodData[main][sub][type].push({
+                id: item['ID'],
+                name: item['Product Variety'],
+                price: item['Price'],
+                origin: item['Name'],
+                freshness: item['Freshness'],
+                city: item['City'],
+                phone: item['Phone No'],
+                whatsapp: item['Whatsapp No'],
+                delivery: item['Home Delivery No'],
+                address: item['Address'],
+                website: item['Website Link']
+            });
+        });
+    }
+
+    function initializeDropdowns() {
+        mainCategorySelect.innerHTML = '<option value="" disabled selected>Choose Food Category...</option>';
+        for (const category in foodData) {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            mainCategorySelect.appendChild(option);
+        }
+    }
+
+
+    // --- Public UI Logic ---
+
+    // Main Category Change
     mainCategorySelect.addEventListener('change', (e) => {
         const selectedMain = e.target.value;
         const subCategories = foodData[selectedMain];
 
-        // Reset Sub Category & Item Type & Product Variety
         resetSelect(subCategorySelect, "Select Sub Category...");
         resetSelect(itemTypeSelect, "Select Product Type...");
         resetSelect(productVarietySelect, "Select Variety...");
@@ -197,113 +188,80 @@ document.addEventListener('DOMContentLoaded', () => {
         itemTypeGroup.classList.add('disabled');
         productVarietyGroup.classList.add('disabled');
 
-        // Hide products
         productDisplay.classList.remove('visible');
         actionBar.classList.remove('visible');
         selectedItems.clear();
         updateSelectionUI();
 
-        // Populate Sub Category
-        for (const sub in subCategories) {
-            const option = document.createElement('option');
-            option.value = sub;
-            option.textContent = sub;
-            subCategorySelect.appendChild(option);
+        if (subCategories) {
+            for (const sub in subCategories) {
+                const option = document.createElement('option');
+                option.value = sub;
+                option.textContent = sub;
+                subCategorySelect.appendChild(option);
+            }
         }
     });
 
-    // Sub Category Change Listener
+    // Sub Category Change
     subCategorySelect.addEventListener('change', (e) => {
         const mainCat = mainCategorySelect.value;
         const subCat = e.target.value;
-        const itemTypes = foodData[mainCat][subCat];
+        const itemTypes = foodData[mainCat] ? foodData[mainCat][subCat] : null;
 
-        // Reset Item Type & Product Variety
         resetSelect(itemTypeSelect, "Select Product Type...");
         resetSelect(productVarietySelect, "Select Variety...");
 
         itemTypeGroup.classList.remove('disabled');
         productVarietyGroup.classList.add('disabled');
-
-        // Hide products
         productDisplay.classList.remove('visible');
 
-        // Populate Item Types
-        for (const type in itemTypes) {
-            const option = document.createElement('option');
-            option.value = type;
-            option.textContent = type;
-            itemTypeSelect.appendChild(option);
+        if (itemTypes) {
+            for (const type in itemTypes) {
+                const option = document.createElement('option');
+                option.value = type;
+                option.textContent = type;
+                itemTypeSelect.appendChild(option);
+            }
         }
     });
 
-    const productVarietyGroup = document.getElementById('product-variety-group');
-    const productVarietySelect = document.getElementById('product-variety');
-
-    // Item Type Change Listener
+    // Item Type Change
     itemTypeSelect.addEventListener('change', (e) => {
         const mainCat = mainCategorySelect.value;
         const subCat = subCategorySelect.value;
         const itemType = e.target.value;
-
         const products = foodData[mainCat][subCat][itemType];
 
-        // Reset Variety
         resetSelect(productVarietySelect, "Select Variety...");
         productVarietyGroup.classList.remove('disabled');
 
-        // Populate Variety
-        products.forEach(product => {
+        const uniqueVarieties = [...new Set(products.map(p => p.name))];
+        uniqueVarieties.forEach(varietyName => {
             const option = document.createElement('option');
-            // Use product name as value for simplicity in this demo
-            option.value = product.name;
-            option.textContent = product.name;
+            option.value = varietyName;
+            option.textContent = varietyName;
             productVarietySelect.appendChild(option);
         });
 
-        // Hide products initially until variety is selected (or show all? Requirement implies variety is next step)
-        // Let's show all for now, and filtering restricts it.
         displayProducts(products);
     });
 
-    // Product Variety Change Listener
+    // Product Variety Change
     productVarietySelect.addEventListener('change', (e) => {
         const mainCat = mainCategorySelect.value;
         const subCat = subCategorySelect.value;
         const itemType = itemTypeSelect.value;
         const selectedVariety = e.target.value;
-
         const products = foodData[mainCat][subCat][itemType];
-        const filteredProducts = products.filter(p => p.name === selectedVariety);
 
-        displayProducts(filteredProducts);
+        displayProducts(products.filter(p => p.name === selectedVariety));
     });
 
     function resetSelect(selectElement, defaultText) {
         selectElement.innerHTML = `<option value="" disabled selected>${defaultText}</option>`;
         selectElement.disabled = false;
     }
-
-    // Detail Modal Elements
-    const detailModal = document.getElementById('product-detail-modal');
-    const closeDetail = document.querySelector('.close-detail-modal');
-    const detailName = document.getElementById('detail-name');
-    const detailPrice = document.getElementById('detail-price');
-    const detailOrigin = document.getElementById('detail-origin');
-    const detailFreshness = document.getElementById('detail-freshness');
-    const btnDetailConfirm = document.getElementById('btn-detail-confirm');
-    let currentDetailItem = null;
-
-    // Entry Form Elements
-    const entryModal = document.getElementById('product-entry-modal');
-    const closeEntry = document.querySelector('.close-entry-modal');
-    const btnOpenEntry = document.getElementById('btn-open-entry');
-    const entryForm = document.getElementById('product-entry-form');
-
-    // Entry Form Dropdowns
-    const entryCategory = document.getElementById('entry-category');
-    const entrySubCategory = document.getElementById('entry-sub-category');
-    const entryItemType = document.getElementById('entry-item-type');
 
     function displayProducts(products) {
         productGrid.innerHTML = '';
@@ -313,8 +271,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('div');
             card.className = 'product-card';
             card.dataset.id = product.id;
-
-            // Click on card body opens details
             card.onclick = (e) => openProductDetail(product);
 
             card.innerHTML = `
@@ -325,17 +281,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h3>${product.name}</h3>
                     <div class="product-price">Rs. ${product.price}</div>
                     <div class="product-details">
-                        <p><strong>Type:</strong> ${product.origin}</p>
-                        <p><strong>Freshness:</strong> ${product.freshness}</p>
+                        <p><strong>Brand:</strong> ${product.origin}</p>
+                        <p><strong>Size:</strong> ${product.freshness}</p>
                         ${product.city ? `<p><strong style="color: #3498db;"><i class="fas fa-map-marker-alt"></i></strong> ${product.city}</p>` : ''}
                     </div>
                 </div>
             `;
 
-            // Attach click event to checkbox container specifically for selection
             const checkboxOverlay = card.querySelector('.checkbox-overlay');
             checkboxOverlay.onclick = (e) => {
-                e.stopPropagation(); // Stop bubbling to card click
+                e.stopPropagation();
                 toggleSelection(product.id, card);
             };
 
@@ -345,7 +300,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function toggleSelection(id, card) {
         const checkbox = card.querySelector('input[type="checkbox"]');
-
         if (selectedItems.has(id)) {
             selectedItems.delete(id);
             card.classList.remove('selected');
@@ -355,44 +309,44 @@ document.addEventListener('DOMContentLoaded', () => {
             card.classList.add('selected');
             checkbox.checked = true;
         }
-
         updateSelectionUI();
     }
 
-    // --- Product Detail Logic ---
-    const detailImage = document.getElementById('detail-image');
-
     function getProductImage(product) {
-        // Simple keyword matching for demo images
-        const name = product.name.toLowerCase();
+        const name = (product.name || "").toLowerCase();
         if (name.includes('burger')) return 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=600&auto=format&fit=crop';
         if (name.includes('pizza')) return 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=600&auto=format&fit=crop';
         if (name.includes('sandwich')) return 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?q=80&w=600&auto=format&fit=crop';
         if (name.includes('broast') || name.includes('chicken')) return 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=600&auto=format&fit=crop';
         if (name.includes('biryani')) return 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?q=80&w=600&auto=format&fit=crop';
-        if (name.includes('haleem')) return 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?q=80&w=600&auto=format&fit=crop';
-        if (name.includes('iphone')) return 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=600&auto=format&fit=crop';
-        if (name.includes('sams')) return 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?q=80&w=600&auto=format&fit=crop';
-        if (name.includes('lap') || name.includes('mac') || name.includes('dell')) return 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=600&auto=format&fit=crop';
-        if (name.includes('corolla') || name.includes('yaris')) return 'https://images.unsplash.com/photo-1623869675785-004a8b0e454b?q=80&w=600&auto=format&fit=crop';
-        if (name.includes('civic') || name.includes('city')) return 'https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=600&auto=format&fit=crop';
-        if (name.includes('kia') || name.includes('sportage')) return 'https://images.unsplash.com/photo-1606552251347-49525143093b?q=80&w=600&auto=format&fit=crop';
-        if (name.includes('shirt') || name.includes('suit')) return 'https://images.unsplash.com/photo-1594938298603-c8148c47e356?q=80&w=600&auto=format&fit=crop';
-        if (name.includes('dress') || name.includes('kurti')) return 'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?q=80&w=600&auto=format&fit=crop';
-
-        return 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=600&auto=format&fit=crop'; // Default Food
+        return 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=600&auto=format&fit=crop';
     }
 
     function openProductDetail(product) {
         currentDetailItem = product;
-
-        // Update Image
         detailImage.src = getProductImage(product);
-
         detailName.textContent = product.name;
         detailPrice.textContent = `Rs. ${product.price}`;
         detailOrigin.textContent = product.origin;
         detailFreshness.textContent = product.freshness;
+
+        detailCity.parentElement.style.display = product.city ? 'block' : 'none';
+        if (product.city) detailCity.textContent = product.city;
+
+        detailPhone.parentElement.style.display = product.phone ? 'block' : 'none';
+        if (product.phone) detailPhone.textContent = product.phone;
+
+        detailWhatsapp.parentElement.style.display = product.whatsapp ? 'block' : 'none';
+        if (product.whatsapp) detailWhatsapp.textContent = product.whatsapp;
+
+        detailDelivery.parentElement.style.display = product.delivery ? 'block' : 'none';
+        if (product.delivery) detailDelivery.textContent = product.delivery;
+
+        detailAddress.parentElement.style.display = product.address ? 'block' : 'none';
+        if (product.address) detailAddress.textContent = product.address;
+
+        detailWebsite.parentElement.style.display = product.website ? 'block' : 'none';
+        if (product.website) detailWebsite.href = product.website;
 
         detailModal.classList.remove('hidden');
         detailModal.classList.add('visible');
@@ -411,222 +365,315 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Product Entry Form Logic ---
 
-    // Open/Close Entry Modal
-    btnOpenEntry.addEventListener('click', () => {
-        entryModal.classList.remove('hidden');
-        entryModal.classList.add('visible');
+    // --- Admin Panel Logic ---
+
+    // Open Login Modal
+    btnAdminLogin.addEventListener('click', () => {
+        adminLoginModal.classList.remove('hidden');
+        adminLoginModal.classList.add('visible');
     });
 
-    closeEntry.addEventListener('click', () => {
-        entryModal.classList.add('hidden');
-        entryModal.classList.remove('visible');
+    closeAdminLogin.addEventListener('click', () => {
+        adminLoginModal.classList.add('hidden');
+        adminLoginModal.classList.remove('visible');
     });
 
-    // Populate Entry Category
-    for (const category in foodData) {
-        if (category === "dummymode") continue;
-        const option = document.createElement('option');
-        option.value = category;
-        option.textContent = category;
-        entryCategory.appendChild(option);
+    // Login Check
+    btnSubmitLogin.addEventListener('click', () => {
+        const pin = adminPinInput.value;
+        if (pin === "1234") { // Simple PIN for prototype
+            adminLoginModal.classList.add('hidden');
+            adminLoginModal.classList.remove('visible');
+            openAdminDashboard();
+            adminPinInput.value = "";
+        } else {
+            alert("Incorrect PIN");
+        }
+    });
+
+    // Open Dashboard
+    function openAdminDashboard() {
+        adminDashboardModal.classList.remove('hidden');
+        adminDashboardModal.classList.add('visible');
+        renderAdminTable();
+        switchAdminTab('manage'); // Default tab
     }
 
-    // Configuration for dynamic field labels
-    const categoryFieldConfig = {
-        "Food": { brand: "Restaurant / Brand", size: "Portion / Qty" },
-        "Electronics": { brand: "Brand", size: "Storage / Variant" },
-        "Cars": { brand: "Make / Company", size: "Model Year" },
-        "Cloths": { brand: "Brand", size: "Size (S/M/L/XL)" }
+    closeAdminDashboard.addEventListener('click', () => {
+        adminDashboardModal.classList.add('hidden');
+        adminDashboardModal.classList.remove('visible');
+    });
+
+    btnAdminLogout.addEventListener('click', () => {
+        adminDashboardModal.classList.add('hidden');
+        adminDashboardModal.classList.remove('visible');
+        alert("Logged out");
+    });
+
+    // Tab Switching
+    window.switchAdminTab = (tabName) => {
+        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+        document.getElementById(`tab-${tabName}`).classList.add('active');
+        // Find button checking onclick attribute is hacky, but sufficient for simple tab logic
+        // Better: use data attributes. For now, just toggling visuals manually in CSS/JS loop
+
+        if (tabName === 'manage') {
+            document.querySelector("button[onclick=\"switchAdminTab('manage')\"]").classList.add('active');
+            renderAdminTable();
+        } else {
+            document.querySelector("button[onclick=\"switchAdminTab('add')\"]").classList.add('active');
+            resetEntryForm(); // Clear form for new entry
+        }
     };
 
-    // Dynamic Logic for Entry Form (Same structure as main search)
-    entryCategory.addEventListener('change', (e) => {
-        const selectedMain = e.target.value;
-        const subCategories = foodData[selectedMain];
 
-        // Update Labels based on config
-        const config = categoryFieldConfig[selectedMain];
-        if (config) {
-            document.querySelector('label[for="entry-brand"]').textContent = config.brand;
-            document.getElementById('entry-brand').placeholder = `e.g. ${config.brand}...`;
-
-            document.querySelector('label[for="entry-size"]').textContent = config.size;
-            document.getElementById('entry-size').placeholder = `e.g. ${config.size}...`;
-        }
-
-        entrySubCategory.innerHTML = '<option value="" disabled selected>Select Sub Category</option>';
-        entryItemType.innerHTML = '<option value="" disabled selected>Select Product Type</option>';
-
-        entrySubCategory.disabled = false;
-        entryItemType.disabled = true;
-
-        for (const sub in subCategories) {
-            const option = document.createElement('option');
-            option.value = sub;
-            option.textContent = sub;
-            entrySubCategory.appendChild(option);
-        }
-    });
-
-    entrySubCategory.addEventListener('change', (e) => {
-        const mainCat = entryCategory.value;
-        const subCat = e.target.value;
-        const itemTypes = foodData[mainCat][subCat];
-
-        entryItemType.innerHTML = '<option value="" disabled selected>Select Product Type</option>';
-        entryItemType.disabled = false;
-
-        for (const type in itemTypes) {
-            const option = document.createElement('option');
-            option.value = type;
-            option.textContent = type;
-            entryItemType.appendChild(option);
-        }
-    });
-
-    // Form Submit
-    entryForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        const mainCat = entryCategory.value;
-        const subCat = entrySubCategory.value;
-        const itemType = entryItemType.value;
-
-        const variety = document.getElementById('entry-variety').value;
-        const price = document.getElementById('entry-price').value;
-        const size = document.getElementById('entry-size').value;
-        const brand = document.getElementById('entry-brand').value;
-
-        if (foodData[mainCat] && foodData[mainCat][subCat] && foodData[mainCat][subCat][itemType]) {
-            const newProduct = {
-                id: Date.now(), // Unique ID based on timestamp
-                name: variety,
-                price: price,
-                origin: brand,
-                freshness: size
-            };
-
-            foodData[mainCat][subCat][itemType].push(newProduct);
-
-            alert(`New product added successfully!\nVariety: ${variety}\nPrice: Rs. ${price}\nAvailable in Search now.`);
-
-            // Close Modal
-            entryModal.classList.add('hidden');
-            entryModal.classList.remove('visible');
-            entryForm.reset();
-
-            // Refresh UI if the user is currently viewing this category
-            if (mainCategorySelect.value === mainCat &&
-                subCategorySelect.value === subCat &&
-                itemTypeSelect.value === itemType) {
-                // Trigger change to refresh Variety dropdown and Grid
-                itemTypeSelect.dispatchEvent(new Event('change'));
-            }
-        } else {
-            alert("Error: Please select all category fields correctly.");
-        }
-    });
-
-    // Close Modals on Outside Click
-    window.addEventListener('click', (e) => {
-        if (e.target == detailModal) {
-            detailModal.classList.add('hidden');
-            detailModal.classList.remove('visible');
-        }
-        if (e.target == entryModal) {
-            entryModal.classList.add('hidden');
-            entryModal.classList.remove('visible');
-        }
-        // Comparison modal logic remains check above or duplicated here if needed
-        if (e.target == comparisonModal) {
-            comparisonModal.classList.add('hidden');
-            comparisonModal.classList.remove('visible');
-        }
-    });
-
-    function updateSelectionUI() {
-        selectedCountSpan.textContent = selectedItems.size;
-
-        if (selectedItems.size > 0) {
-            actionBar.classList.add('visible');
-        } else {
-            actionBar.classList.remove('visible');
-        }
+    // Render Admin Table
+    function renderAdminTable() {
+        adminProductTable.innerHTML = '';
+        rawProductData.forEach(p => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${p['Product Variety']}</td>
+                <td>${p['MainCategory']} > ${p['SubCategory']}</td>
+                <td>Rs. ${p['Price']}</td>
+                <td>
+                    <button class="action-icon edit-icon" onclick="editProduct(${p['ID']})"><i class="fas fa-edit"></i></button>
+                    <button class="action-icon delete-icon" onclick="deleteProduct(${p['ID']})"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
+            adminProductTable.appendChild(tr);
+        });
     }
 
-    const comparisonModal = document.getElementById('comparison-modal');
-    const comparisonContainer = document.getElementById('comparison-container');
-    const closeStart = document.querySelector('.close-modal');
+    // --- Add / Edit Product Logic ---
+
+    // Populate Datalists for Form
+    function populateDatalists() {
+        categoryList.innerHTML = '';
+        const mains = new Set(rawProductData.map(p => p['MainCategory']));
+        mains.forEach(m => {
+            let opt = document.createElement('option');
+            opt.value = m;
+            categoryList.appendChild(opt);
+        });
+        // Logic for sub/item types updates dynamically on input
+    }
+
+    // Listeners for dynamic datalists update (simplified)
+    entryCategoryInput.addEventListener('input', () => {
+        const val = entryCategoryInput.value;
+        const currentSub = entrySubCategoryInput.value; // Store current value
+
+        subCategoryList.innerHTML = '';
+        const subs = new Set(rawProductData.filter(p => p['MainCategory'] === val).map(p => p['SubCategory']));
+        subs.forEach(s => {
+            let opt = document.createElement('option');
+            opt.value = s;
+            subCategoryList.appendChild(opt);
+        });
+
+        // If the current subcategory is not in the new list (and we changed main category), 
+        // we might want to warn or clear, but for editing, we often want to keep custom values.
+        // For now, we DO NOT clear it automatically to prevent data loss during edit.
+    });
+
+    // Reset Form
+    function resetEntryForm() {
+        entryForm.reset();
+        editIdInput.value = '';
+        formTitle.textContent = "Add New Product";
+        btnSaveProduct.textContent = "Save Product";
+        btnCancelEdit.classList.add('hidden');
+        populateDatalists();
+    }
+
+    // Edit Product
+    window.editProduct = (id) => {
+        const product = rawProductData.find(p => p['ID'] == id);
+        if (!product) return;
+
+        switchAdminTab('add'); // Switch to form tab
+
+        formTitle.textContent = "Edit Product";
+        btnSaveProduct.textContent = "Update Product";
+        btnCancelEdit.classList.remove('hidden');
+
+        editIdInput.value = product['ID'];
+        entryCategoryInput.value = product['MainCategory'];
+        entrySubCategoryInput.value = product['SubCategory'];
+        entryItemTypeInput.value = product['ItemType'];
+
+        document.getElementById('entry-variety').value = product['Product Variety'];
+        document.getElementById('entry-price').value = product['Price'];
+        document.getElementById('entry-size').value = product['Freshness'];
+        document.getElementById('entry-brand').value = product['Name'];
+        document.getElementById('entry-phone').value = product['Phone No'];
+        document.getElementById('entry-whatsapp').value = product['Whatsapp No'];
+        document.getElementById('entry-delivery').value = product['Home Delivery No'];
+        document.getElementById('entry-address').value = product['Address'];
+        document.getElementById('entry-website').value = product['Website Link'];
+    };
+
+    btnCancelEdit.addEventListener('click', () => {
+        resetEntryForm();
+        switchAdminTab('manage');
+    });
+
+
+    // Save Product (Create or Update)
+    entryForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const isEdit = !!editIdInput.value;
+        const actionType = isEdit ? 'update' : 'create';
+        const id = isEdit ? editIdInput.value : Date.now();
+
+        const productData = {
+            "ID": id,
+            "MainCategory": entryCategoryInput.value,
+            "SubCategory": entrySubCategoryInput.value,
+            "ItemType": entryItemTypeInput.value,
+            "Product Variety": document.getElementById('entry-variety').value,
+            "Price": document.getElementById('entry-price').value,
+            "Freshness": document.getElementById('entry-size').value,
+            "Name": document.getElementById('entry-brand').value,
+            "Phone No": document.getElementById('entry-phone').value,
+            "Whatsapp No": document.getElementById('entry-whatsapp').value,
+            "Home Delivery No": document.getElementById('entry-delivery').value,
+            "Address": document.getElementById('entry-address').value,
+            "Website Link": document.getElementById('entry-website').value,
+            "City": "Karachi"
+        };
+
+        const originalText = btnSaveProduct.textContent;
+        btnSaveProduct.textContent = isEdit ? "Updating..." : "Saving...";
+        btnSaveProduct.disabled = true;
+
+        try {
+            const response = await fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify({
+                    action: actionType, // 'create' or 'update'
+                    data: productData
+                })
+            });
+
+            const result = await response.text();
+
+            if (result.includes("Updated") || result.includes("Created")) {
+                alert(isEdit ? "Product Updated Successfully!" : "Product Added Successfully!");
+                resetEntryForm();
+                if (isEdit) switchAdminTab('manage');
+                fetchProducts();
+            } else {
+                alert("Server Response: " + result + "\n\nMake sure ID exists and Web App is re-deployed.");
+            }
+
+        } catch (error) {
+            console.error(error);
+            alert("Network Error: " + error.message);
+        } finally {
+            btnSaveProduct.textContent = originalText;
+            btnSaveProduct.disabled = false;
+        }
+    });
+
+    // Delete Product
+    window.deleteProduct = async (id) => {
+        if (!confirm("Are you sure you want to delete this product?")) return;
+
+        try {
+            const response = await fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify({
+                    action: "delete",
+                    data: { ID: id }
+                })
+            });
+
+            const result = await response.text();
+
+            if (result.includes("Deleted")) {
+                alert("Product Deleted Successfully!");
+                fetchProducts();
+            } else {
+                alert("Delete Failed: " + result);
+            }
+
+        } catch (error) {
+            console.error(error);
+            alert("Error deleting: " + error.message);
+        }
+    };
+
+
+    // --- Other Listeners ---
+
+    // Comparison Logic (Existing)
+    const btnCompare = document.getElementById('btn-compare');
+    btnCompare.addEventListener('click', () => {
+        if (selectedItems.size < 2) {
+            alert("Please select at least 2 items to compare.");
+            return;
+        }
+        comparisonContainer.innerHTML = '';
+        const itemsToCompare = rawProductData.filter(p => selectedItems.has(p['ID']));
+        itemsToCompare.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'comparison-item';
+            itemDiv.innerHTML = `
+                <h3>${item['Product Variety']}</h3>
+                <p class="price">Rs. ${item['Price']}</p>
+                <div class="details">
+                    <p><strong>Brand:</strong> <br>${item['Name']}</p>
+                    <p><strong>Size:</strong> <br>${item['Freshness']}</p>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="confirmSingleOrder(${item['ID']}, '${item['Product Variety']}')">Select</button>
+            `;
+            comparisonContainer.appendChild(itemDiv);
+        });
+        comparisonModal.classList.remove('hidden');
+        comparisonModal.classList.add('visible');
+    });
 
     btnConfirm.addEventListener('click', () => {
         if (selectedItems.size === 0) {
             alert("Please select at least one item to confirm order.");
             return;
         }
-        alert(`Order Confirmed for ${selectedItems.size} items! \n(This is a prototype demo)`);
+        alert(`Order Confirmed for ${selectedItems.size} items!`);
     });
 
-    const btnCompare = document.getElementById('btn-compare');
-
-    btnCompare.addEventListener('click', () => {
-        if (selectedItems.size < 2) {
-            alert("Please select at least 2 items to compare.");
-            return;
-        }
-
-        comparisonContainer.innerHTML = '';
-        const itemsToCompare = [];
-
-        // Brute-force find items (since structure is nested, flattened search is easiest)
-        const allProducts = [];
-        for (const main in foodData) {
-            if (main == "dummymode") continue;
-            for (const sub in foodData[main]) {
-                for (const type in foodData[main][sub]) {
-                    foodData[main][sub][type].forEach(p => allProducts.push(p));
-                }
-            }
-        }
-
-        allProducts.forEach(item => {
-            if (selectedItems.has(item.id)) {
-                itemsToCompare.push(item);
-            }
-        });
-
-        // Create Comparison Table/Grid
-        itemsToCompare.forEach(item => {
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'comparison-item';
-            // Added currency formatting
-            itemDiv.innerHTML = `
-                <h3>${item.name}</h3>
-                <p class="price">Rs. ${item.price}</p>
-                <div class="details">
-                    <p><strong>Type:</strong> <br>${item.origin}</p>
-                    <p><strong>Freshness:</strong> <br>${item.freshness}</p>
-                </div>
-                <button class="btn btn-primary btn-sm" onclick="confirmSingleOrder(${item.id}, '${item.name}')">Select</button>
-            `;
-            comparisonContainer.appendChild(itemDiv);
-        });
-
-        comparisonModal.classList.remove('hidden');
-        comparisonModal.classList.add('visible');
-    });
-
-    closeStart.addEventListener('click', () => {
-        comparisonModal.classList.add('hidden');
-        comparisonModal.classList.remove('visible');
-    });
-
-    // Expose function to window for the button onclick
     window.confirmSingleOrder = (id, name) => {
         alert(`You have selected: ${name} to confirm your order!`);
         comparisonModal.classList.add('hidden');
         comparisonModal.classList.remove('visible');
-        // Reset selection if desired, or keep as is
     };
+
+    function updateSelectionUI() {
+        selectedCountSpan.textContent = selectedItems.size;
+        if (selectedItems.size > 0) actionBar.classList.add('visible');
+        else actionBar.classList.remove('visible');
+    }
+
+    // Window Click to close public modals
+    window.addEventListener('click', (e) => {
+        if (e.target == detailModal) {
+            detailModal.classList.add('hidden');
+            detailModal.classList.remove('visible');
+        }
+        if (e.target == comparisonModal) {
+            comparisonModal.classList.add('hidden');
+            comparisonModal.classList.remove('visible');
+        }
+        // Admin modals
+        if (e.target == adminLoginModal) {
+            adminLoginModal.classList.add('hidden');
+            adminLoginModal.classList.remove('visible');
+        }
+    });
+
 });
