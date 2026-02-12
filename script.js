@@ -21,12 +21,12 @@ const foodData = {
         },
         "Desi Cuisine": {
             "Biryani": [
-                { id: 401, name: "Chicken Biryani", price: "300", origin: "Karachi Spice", freshness: "Steaming Hot" },
-                { id: 402, name: "Beef Biryani", price: "400", origin: "Traditional", freshness: "Aromatic" }
+                { id: 401, name: "Chicken Biryani", price: "300", origin: "Karachi Spice", freshness: "Steaming Hot", city: "Karachi" },
+                { id: 402, name: "Beef Biryani", price: "400", origin: "Traditional", freshness: "Aromatic", city: "Lahore" }
             ],
             "Haleem": [
-                { id: 403, name: "Special Haleem", price: "250", origin: "Slow Cooked", freshness: "Garnished" },
-                { id: 404, name: "Shahi Haleem", price: "350", origin: "Royal Recipe", freshness: "Premium" }
+                { id: 403, name: "Special Haleem", price: "250", origin: "Slow Cooked", freshness: "Garnished", city: "Karachi" },
+                { id: 404, name: "Shahi Haleem", price: "350", origin: "Royal Recipe", freshness: "Premium", city: "Lahore" }
             ],
             "Karahi": [
                 { id: 405, name: "Chicken Karahi", price: "1500", origin: "Peshawari", freshness: "Fresh Made" }
@@ -113,6 +113,64 @@ document.addEventListener('DOMContentLoaded', () => {
     const actionBar = document.getElementById('action-bar');
     const selectedCountSpan = document.getElementById('selected-count');
     const btnConfirm = document.getElementById('btn-confirm');
+
+    // Location Modal Elements
+    const locationModal = document.getElementById('location-modal');
+    const btnCheckLocation = document.getElementById('btn-check-location');
+
+    // Check Location on Load
+    checkLocationPermission();
+
+    function checkLocationPermission() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+            // Optionally handle this case, maybe default to a city
+        }
+    }
+
+    function showPosition(position) {
+        // Location allowed
+        console.log("User Location:", position.coords.latitude, position.coords.longitude);
+        locationModal.classList.add('hidden');
+        locationModal.classList.remove('visible');
+
+        // Enhance UI to show detected location (Simulated)
+        const userCity = "Karachi"; // Simulated Reverse Geocoding
+        console.log("Detected City:", userCity);
+
+        // Optional: Update UI to show 'Deals in Karachi'
+        const headerTitle = document.querySelector('.logo p');
+        if (headerTitle) headerTitle.textContent = `Compare & Choose in ${userCity}`;
+    }
+
+    function showError(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                locationModal.classList.remove('hidden');
+                locationModal.classList.add('visible');
+                break;
+            case error.POSITION_UNAVAILABLE:
+            case error.TIMEOUT:
+            case error.UNKNOWN_ERROR:
+                // For other errors, maybe just log or show a different message.
+                // For now, we strictly enforce "Turn On Location" as requested.
+                locationModal.classList.remove('hidden');
+                locationModal.classList.add('visible');
+                break;
+        }
+    }
+
+    btnCheckLocation.addEventListener('click', () => {
+        // Retry logic
+        checkLocationPermission();
+        // If the user has permanently blocked it, they need to change browser settings.
+        // This button acts as a "Try Again" or prompt to refresh.
+        // For better UX, we might reload the page or instruct them.
+        alert("Please ensure Location is enabled in your browser settings, then click OK.");
+        window.location.reload();
+    });
 
     let selectedItems = new Set();
 
@@ -269,6 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="product-details">
                         <p><strong>Type:</strong> ${product.origin}</p>
                         <p><strong>Freshness:</strong> ${product.freshness}</p>
+                        ${product.city ? `<p><strong style="color: #3498db;"><i class="fas fa-map-marker-alt"></i></strong> ${product.city}</p>` : ''}
                     </div>
                 </div>
             `;
