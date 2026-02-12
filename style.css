@@ -145,8 +145,9 @@ main {
 .input-group {
     display: flex;
     flex-direction: column;
-    width: 220px;
-    /* Much smaller width */
+    flex: 1;
+    min-width: 180px;
+    max-width: 250px;
     transition: opacity 0.3s, transform 0.3s;
 }
 

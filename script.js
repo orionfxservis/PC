@@ -130,12 +130,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedMain = e.target.value;
         const subCategories = foodData[selectedMain];
 
-        // Reset Sub Category & Item Type
+        // Reset Sub Category & Item Type & Product Variety
         resetSelect(subCategorySelect, "Select Sub Category...");
         resetSelect(itemTypeSelect, "Select Product Type...");
+        resetSelect(productVarietySelect, "Select Variety...");
 
         subCategoryGroup.classList.remove('disabled');
         itemTypeGroup.classList.add('disabled');
+        productVarietyGroup.classList.add('disabled');
 
         // Hide products
         productDisplay.classList.remove('visible');
@@ -158,9 +160,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const subCat = e.target.value;
         const itemTypes = foodData[mainCat][subCat];
 
-        // Reset Item Type
+        // Reset Item Type & Product Variety
         resetSelect(itemTypeSelect, "Select Product Type...");
+        resetSelect(productVarietySelect, "Select Variety...");
+
         itemTypeGroup.classList.remove('disabled');
+        productVarietyGroup.classList.add('disabled');
 
         // Hide products
         productDisplay.classList.remove('visible');
@@ -174,6 +179,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    const productVarietyGroup = document.getElementById('product-variety-group');
+    const productVarietySelect = document.getElementById('product-variety');
+
     // Item Type Change Listener
     itemTypeSelect.addEventListener('change', (e) => {
         const mainCat = mainCategorySelect.value;
@@ -181,7 +189,36 @@ document.addEventListener('DOMContentLoaded', () => {
         const itemType = e.target.value;
 
         const products = foodData[mainCat][subCat][itemType];
+
+        // Reset Variety
+        resetSelect(productVarietySelect, "Select Variety...");
+        productVarietyGroup.classList.remove('disabled');
+
+        // Populate Variety
+        products.forEach(product => {
+            const option = document.createElement('option');
+            // Use product name as value for simplicity in this demo
+            option.value = product.name;
+            option.textContent = product.name;
+            productVarietySelect.appendChild(option);
+        });
+
+        // Hide products initially until variety is selected (or show all? Requirement implies variety is next step)
+        // Let's show all for now, and filtering restricts it.
         displayProducts(products);
+    });
+
+    // Product Variety Change Listener
+    productVarietySelect.addEventListener('change', (e) => {
+        const mainCat = mainCategorySelect.value;
+        const subCat = subCategorySelect.value;
+        const itemType = itemTypeSelect.value;
+        const selectedVariety = e.target.value;
+
+        const products = foodData[mainCat][subCat][itemType];
+        const filteredProducts = products.filter(p => p.name === selectedVariety);
+
+        displayProducts(filteredProducts);
     });
 
     function resetSelect(selectElement, defaultText) {
@@ -393,12 +430,44 @@ document.addEventListener('DOMContentLoaded', () => {
     // Form Submit
     entryForm.addEventListener('submit', (e) => {
         e.preventDefault();
+
+        const mainCat = entryCategory.value;
+        const subCat = entrySubCategory.value;
+        const itemType = entryItemType.value;
+
         const variety = document.getElementById('entry-variety').value;
         const price = document.getElementById('entry-price').value;
-        alert(`New product added successfully!\nVariety: ${variety}\nPrice: Rs. ${price}\n(This is a prototype demo)`);
-        entryModal.classList.add('hidden');
-        entryModal.classList.remove('visible');
-        entryForm.reset();
+        const size = document.getElementById('entry-size').value;
+        const brand = document.getElementById('entry-brand').value;
+
+        if (foodData[mainCat] && foodData[mainCat][subCat] && foodData[mainCat][subCat][itemType]) {
+            const newProduct = {
+                id: Date.now(), // Unique ID based on timestamp
+                name: variety,
+                price: price,
+                origin: brand,
+                freshness: size
+            };
+
+            foodData[mainCat][subCat][itemType].push(newProduct);
+
+            alert(`New product added successfully!\nVariety: ${variety}\nPrice: Rs. ${price}\nAvailable in Search now.`);
+
+            // Close Modal
+            entryModal.classList.add('hidden');
+            entryModal.classList.remove('visible');
+            entryForm.reset();
+
+            // Refresh UI if the user is currently viewing this category
+            if (mainCategorySelect.value === mainCat &&
+                subCategorySelect.value === subCat &&
+                itemTypeSelect.value === itemType) {
+                // Trigger change to refresh Variety dropdown and Grid
+                itemTypeSelect.dispatchEvent(new Event('change'));
+            }
+        } else {
+            alert("Error: Please select all category fields correctly.");
+        }
     });
 
     // Close Modals on Outside Click
