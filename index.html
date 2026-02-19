@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qeemat Point - Compare & Save</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">Qeemat Point</div>
+        <div class="nav-links">
+            <a href="#" class="active">Home</a>
+            <a href="#products">Products</a>
+            <a href="#about">About</a>
+        </div>
+        <div class="auth-buttons">
+            <a href="#" id="loginBtn" class="login-trigger">
+                <i class="fa-solid fa-user-shield"></i>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-slider">
+            <div class="slide active"
+                style="background-image: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop');">
+            </div>
+            <div class="slide"
+                style="background-image: url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2070&auto=format&fit=crop');">
+            </div>
+            <div class="slide"
+                style="background-image: url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=2070&auto=format&fit=crop');">
+            </div>
+            <div class="slide"
+                style="background-image: url('https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=2070&auto=format&fit=crop');">
+            </div>
+        </div>
+
+        <div class="hero-content">
+            <h1>Find the Best Price. <br> Every Time.</h1>
+            <p>پاکستانیوں کے لیے قابلِ اعتماد قیمت گائیڈ</p>
+
+            <div class="search-panel">
+                <div class="search-box">
+                    <i class="fa-solid fa-location-dot location-icon" id="locationIcon"></i>
+                    <input type="text" id="productSearch" placeholder="What are you looking for today?">
+                    <button id="searchBtn"><i class="fa-solid fa-search"></i> Search</button>
+                </div>
+                <div id="locationStatus" class="location-status">Checking location...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Grid Placeholder -->
+    <section id="products" class="products-section">
+        <h2>Available Options</h2>
+        <div class="product-grid" id="productGrid">
+            <!-- Products will be injected here -->
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Welcome Back</h2>
+            <p>Please select your login type</p>
+
+            <div class="login-options">
+                <button class="tab-btn active" onclick="openLoginTab('user')">User</button>
+                <button class="tab-btn" onclick="openLoginTab('company')">Company</button>
+                <button class="tab-btn" onclick="openLoginTab('admin')">Admin</button>
+            </div>
+
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">Username / Email</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="btn btn-full">Login</button>
+                <p id="loginMessage" class="message"></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="data-service.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Qeemat Point</title>
+    <link rel="stylesheet" href="style.css"> <!-- Reusing main styles for variables -->
+    <link rel="stylesheet" href="admin.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">AdminPanel</div>
+            <ul class="menu">
+                <li class="active" onclick="showSection('dashboard')"><i class="fa-solid fa-chart-line"></i> Dashboard
+                </li>
+                <li onclick="showSection('categories')"><i class="fa-solid fa-layer-group"></i> Manage Categories</li>
+                <li onclick="showSection('products')"><i class="fa-solid fa-box"></i> Manage Products</li>
+                <li onclick="showSection('ads')"><i class="fa-solid fa-bullhorn"></i> Place Ads</li>
+                <li onclick="showSection('banners')"><i class="fa-solid fa-image"></i> Manage Banners</li>
+                <li onclick="logout()"><i class="fa-solid fa-sign-out-alt"></i> Logout</li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Dashboard Overview -->
+            <section id="dashboard" class="admin-section active">
+                <h1>Dashboard Overview</h1>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Products</h3>
+                        <p id="totalProducts">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Categories</h3>
+                        <p id="totalCategories">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Active Users</h3>
+                        <p>12</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Registered Companies</h3>
+                        <p id="totalCompanies">5</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Category Management -->
+            <section id="categories" class="admin-section">
+                <h1>Manage Categories</h1>
+
+                <div class="form-container">
+                    <h3>Add New Category</h3>
+                    <form id="categoryForm">
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Category Name</label>
+                                <input type="text" id="catName" placeholder="e.g., Electronics" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Sub-Category Name</label>
+                                <input type="text" id="subCatName" placeholder="e.g., Mobile Phones" required>
+                            </div>
+                        </div>
+                        <label style="margin-top: 20px; display: block; margin-bottom: 10px;">Custom Fields</label>
+                        <div class="field-header">
+                            <span>Field Name</span>
+                            <span>Type</span>
+                            <span></span>
+                        </div>
+                        <div id="fieldsContainer">
+                            <!-- Dynamic fields will be added here -->
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="addField()">+ Add Field</button>
+                        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Add Category</button>
+                    </form>
+                </div>
+
+                <div class="list-container">
+                    <h3>Existing Categories</h3>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Sub-Category</th>
+                                <th>Fields</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryList">
+                            <!-- Categories will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Product Management (Placeholder for Company View mostly) -->
+            <section id="products" class="admin-section">
+                <h1>Manage Products</h1>
+
+                <div class="form-container">
+                    <h3>Add New Product</h3>
+                    <form id="adminProductForm">
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Choose Category</label>
+                                <select id="prodCategory" required>
+                                    <option value="">Select Category</option>
+                                    <!-- Populated via JS -->
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Select Sub Category</label>
+                                <select id="prodSubCategory" required>
+                                    <option value="">Select Sub Category</option>
+                                    <!-- Populated via JS -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Select Product</label>
+                                <input type="text" id="prodName" placeholder="Product Name" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Product Variety</label>
+                                <input type="text" id="prodVariety" placeholder="e.g., Spicy, Large">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Qty</label>
+                                <select id="prodQty" required>
+                                    <option value="Nos">Nos</option>
+                                    <option value="Qtr">Qtr</option>
+                                    <option value="Half">Half</option>
+                                    <option value="Full">Full</option>
+                                    <option value="Half Kg">Half Kg</option>
+                                    <option value="1 Kg">1 Kg</option>
+                                    <option value="2 Kg">2 Kg</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Price (Rs.)</label>
+                                <input type="number" id="prodPrice" placeholder="e.g., 1500" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Brand</label>
+                                <input type="text" id="prodBrand" placeholder="Brand Name">
+                            </div>
+                            <div class="input-group">
+                                <label>Contact No</label>
+                                <input type="text" id="prodContact" placeholder="0300-1234567">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Whatsapp No</label>
+                                <input type="text" id="prodWhatsapp" placeholder="0300-1234567">
+                            </div>
+                            <div class="input-group">
+                                <label>Delivery No</label>
+                                <input type="text" id="prodDelivery" placeholder="0300-1234567">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Address</label>
+                            <input type="text" id="prodAddress" placeholder="Full Address">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Product Image URL</label>
+                            <input type="url" id="prodImage" placeholder="https://example.com/image.jpg">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Add
+                            Product</button>
+                    </form>
+                </div>
+
+                <div class="list-container">
+                    <h3>Existing Products</h3>
+                    <div class="grid-table-header">
+                        <div>Image</div>
+                        <div>Name</div>
+                        <div>Category</div>
+                        <div>Price</div>
+                        <div>Actions</div>
+                    </div>
+                    <div id="adminProductList">
+                        <!-- Products injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Place Ads Section -->
+            <section id="ads" class="admin-section">
+                <h1>Place Ads</h1>
+                <div class="form-container">
+                    <h3>Create New Ad</h3>
+                    <p>Ad placement functionality coming soon...</p>
+                </div>
+            </section>
+
+            <!-- Banner Management Section -->
+            <section id="banners" class="admin-section">
+                <h1>Manage Banners</h1>
+                <div class="form-container">
+                    <h3>Add New Banner</h3>
+                    <form id="bannerForm">
+                        <div class="input-group">
+                            <label>Banner Image URL</label>
+                            <input type="url" id="bannerImage" placeholder="https://example.com/banner.jpg" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Weblink (Optional)</label>
+                            <input type="url" id="bannerLink" placeholder="https://example.com/promo">
+                        </div>
+                        <div class="input-group">
+                            <label>Preview</label>
+                            <div id="bannerPreview" class="banner-preview">
+                                <p>Image preview will appear here</p>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Banner</button>
+                    </form>
+                </div>
+
+                <div class="list-container">
+                    <h3>Existing Banners</h3>
+                    <div id="bannerList" class="banner-grid">
+                        <!-- Banners injected here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="data-service.js"></script>
+    <script src="admin.js"></script>
+</body>
+
+</html>

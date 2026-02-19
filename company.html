@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Dashboard - Qeemat Point</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin.css"> <!-- Reusing admin styles -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">CompanyPanel</div>
+            <ul class="menu">
+                <li class="active" onclick="showSection('addProduct')"><i class="fa-solid fa-plus-circle"></i> Add
+                    Product</li>
+                <li onclick="showSection('myProducts')"><i class="fa-solid fa-box-open"></i> My Products</li>
+                <li onclick="logout()"><i class="fa-solid fa-sign-out-alt"></i> Logout</li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+
+            <!-- Add Product Section -->
+            <section id="addProduct" class="admin-section active">
+                <h1>Add New Product</h1>
+
+                <div class="form-container">
+                    <form id="productForm">
+                        <div class="input-group">
+                            <label>Product Name</label>
+                            <input type="text" id="prodName" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Category</label>
+                            <select id="prodCategory" onchange="loadCategoryFields()" required>
+                                <option value="">Select Category</option>
+                                <!-- Categories injected here -->
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Price (Rs.)</label>
+                            <input type="number" id="prodPrice" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Image URL</label>
+                            <input type="url" id="prodImage" placeholder="https://example.com/image.jpg">
+                        </div>
+
+                        <div id="dynamicFields">
+                            <!-- Fields specific to category injected here -->
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Publish
+                            Product</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- My Products Section -->
+            <section id="myProducts" class="admin-section">
+                <h1>My Products</h1>
+                <div class="grid-table-header">
+                    <div>Image</div>
+                    <div>Name</div>
+                    <div>Category</div>
+                    <div>Price</div>
+                    <div>Actions</div>
+                </div>
+                <div id="companyProductList">
+                    <!-- Products injected here -->
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="data-service.js"></script>
+    <script src="company.js"></script>
+</body>
+
+</html>

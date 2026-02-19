@@ -1,0 +1,441 @@
+:root {
+    --primary-color: #cca43b;
+    --secondary-color: #8b5a2b;
+    --accent-color: #e5d090;
+    --dark-bg: #1a1a1a;
+    --light-text: #ffffff;
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --font-main: 'Outfit', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--dark-bg);
+    color: var(--light-text);
+    overflow-x: hidden;
+}
+
+/* Navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    background-color: transparent;
+    background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 100%);
+    /* Darker gradient */
+    transition: background-color 0.6s ease, padding 0.6s ease, box-shadow 0.6s ease;
+}
+
+.navbar.scrolled {
+    background-color: #000000;
+    /* Solid dark background when scrolled */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    padding: 15px 50px;
+    /* Optional: shrink slightly on scroll */
+}
+
+.logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #b8860b;
+    /* Golden Brown */
+    text-shadow: 0 0 10px rgba(184, 134, 11, 0.3);
+}
+
+.nav-links a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--primary-color);
+}
+
+/* Login Trigger */
+.login-trigger {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Center the icon */
+    width: 45px;
+    /* Fixed width */
+    height: 45px;
+    /* Fixed height */
+    border: 2px solid #b8860b;
+    /* Golden border */
+    border-radius: 50%;
+    /* Circle */
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.login-trigger i {
+    font-size: 1.2rem;
+    transition: transform 0.5s ease, color 0.3s;
+}
+
+.login-trigger:hover {
+    color: #b8860b;
+    /* Golden Brown */
+}
+
+.login-trigger:hover i {
+    color: #b8860b;
+    animation: rotateIcon 2s linear infinite;
+    /* Slow rotation */
+}
+
+@keyframes rotateIcon {
+    from {
+        transform: rotateY(0deg);
+    }
+
+    to {
+        transform: rotateY(360deg);
+    }
+}
+
+.btn {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(58, 134, 255, 0.4);
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hero-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out, transform 6s ease;
+    transform: scale(1);
+}
+
+.slide.active {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.slide::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    /* Overlay */
+}
+
+.hero-content {
+    text-align: center;
+    z-index: 10;
+    max-width: 800px;
+    padding: 20px;
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    background: linear-gradient(45deg, #fff, #e5d090);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: 'Playfair Display', serif;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Search Panel */
+.search-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    padding: 15px;
+    border-radius: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.search-box {
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+.location-icon {
+    color: var(--primary-color);
+    margin: 0 15px;
+    font-size: 1.2rem;
+}
+
+.search-box input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    padding: 10px;
+    outline: none;
+}
+
+.search-box input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+#searchBtn {
+    padding: 12px 30px;
+    border-radius: 30px;
+    border: none;
+    background: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#searchBtn:hover {
+    background: var(--secondary-color);
+}
+
+.location-status {
+    font-size: 0.8rem;
+    color: var(--accent-color);
+    margin-top: 10px;
+    height: 20px;
+}
+
+/* Products Section */
+.products-section {
+    padding: 80px 50px;
+    background: #121212;
+}
+
+.products-section h2 {
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.product-card {
+    background: #1e1e1e;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+}
+
+.product-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.product-info {
+    padding: 20px;
+}
+
+.product-info h3 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.product-info .price {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #252525;
+    padding: 30px 25px;
+    /* Reduced padding */
+    border-radius: 20px;
+    width: 90%;
+    /* Responsive width */
+    max-width: 350px;
+    /* Reduced max-width from 400px */
+    text-align: center;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-content h2 {
+    margin-bottom: 5px;
+    /* Added spacing */
+    font-size: 1.5rem;
+    /* Slightly smaller font */
+}
+
+.modal-content p {
+    margin-bottom: 20px;
+    /* Added spacing before login options */
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #fff;
+}
+
+.login-options {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 8px;
+    /* Reduced gap slightly */
+}
+
+.tab-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 6px 14px;
+    /* Reduced padding */
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.tab-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 15px;
+    /* Reduced margin */
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    /* Reduced margin */
+    font-size: 0.85rem;
+    /* Smaller font */
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    /* Reduced padding */
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    outline: none;
+    font-size: 0.95rem;
+}
+
+.input-group input:focus {
+    border-color: var(--primary-color);
+}
+
+.btn-full {
+    width: 100%;
+    margin-top: 10px;
+    background: var(--primary-color);
+    color: white;
+}
+
+.message {
+    color: var(--accent-color);
+    margin-top: 15px;
+    font-size: 0.9rem;
+}
