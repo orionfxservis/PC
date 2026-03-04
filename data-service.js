@@ -28,7 +28,8 @@ const DataService = {
         if (DataService.isGAS) {
             return await DataService._promisify('getProducts');
         } else {
-            return JSON.parse(localStorage.getItem('products')) || [];
+            try { return JSON.parse(localStorage.getItem('products')) || []; }
+            catch (e) { return []; }
         }
     },
 
@@ -47,7 +48,8 @@ const DataService = {
         if (DataService.isGAS) {
             return await DataService._promisify('getCategories');
         } else {
-            return JSON.parse(localStorage.getItem('categories')) || [];
+            try { return JSON.parse(localStorage.getItem('categories')) || []; }
+            catch (e) { return []; }
         }
     },
 
@@ -66,7 +68,8 @@ const DataService = {
         if (DataService.isGAS) {
             return await DataService._promisify('getBanners');
         } else {
-            return JSON.parse(localStorage.getItem('banners')) || [];
+            try { return JSON.parse(localStorage.getItem('banners')) || []; }
+            catch (e) { return []; }
         }
     },
 

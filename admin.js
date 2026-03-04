@@ -44,7 +44,7 @@ async function initAdmin() {
         updateBannerPreview();
     } catch (error) {
         console.error("Failed to load admin data:", error);
-        alert("Failed to load data. Please try refreshing.");
+        // alert("Failed to load data. Please try refreshing."); // Suppressed for local testing without GAS
     }
 }
 
@@ -296,15 +296,22 @@ if (adminProductForm) {
             delivery: document.getElementById('prodDelivery').value,
             address: document.getElementById('prodAddress').value,
             image: document.getElementById('prodImage').value || 'https://via.placeholder.com/150',
+            addedBy: 'Admin'
         };
 
-        products.push(newProduct);
-        await DataService.saveProducts(products);
+        try {
+            products.push(newProduct);
+            await DataService.saveProducts(products);
 
-        alert('Product Added Successfully!');
-        adminProductForm.reset();
-        renderAdminProducts();
-        updateUI(); // Update stats
+            alert('Product Added Successfully!');
+            adminProductForm.reset();
+            renderAdminProducts();
+            updateUI(); // Update stats
+        } catch (error) {
+            alert('Failed to save product. Check internet connection or Google Script logs.');
+            console.error('Save product error:', error);
+            products.pop(); // Remove the failed product locally
+        }
     });
 }
 

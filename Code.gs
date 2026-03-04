@@ -68,20 +68,31 @@ function saveData(sheetName, data) {
   
   if (data.length === 0) return;
   
-  // Extract headers
-  const headers = Object.keys(data[0]).map(key => {
-    // Check if value is object/array, if so mark as JSON
-    if (typeof data[0][key] === 'object' && data[0][key] !== null) {
-      return key + ' (JSON)';
-    }
-    return key;
+  // Extract all unique headers across all objects in data
+  const headerSet = new Set();
+  const isJsonField = {};
+  
+  data.forEach(item => {
+    Object.keys(item).forEach(key => {
+        headerSet.add(key);
+        if (typeof item[key] === 'object' && item[key] !== null) {
+            isJsonField[key] = true;
+        }
+    });
+  });
+  
+  const baseHeaders = Array.from(headerSet);
+  
+  // Format headers
+  const headers = baseHeaders.map(key => {
+    return isJsonField[key] ? key + ' (JSON)' : key;
   });
   
   const rows = data.map(item => {
-    return headers.map(header => {
-      const key = header.replace(' (JSON)', '');
+    return baseHeaders.map(key => {
       const value = item[key];
-      if (typeof value === 'object' && value !== null) {
+      if (value === undefined || value === null) return '';
+      if (isJsonField[key] && typeof value === 'object') {
         return JSON.stringify(value);
       }
       return value;

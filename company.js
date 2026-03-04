@@ -91,7 +91,8 @@ if (productForm) {
             image: document.getElementById('prodImage').value || 'https://via.placeholder.com/150',
             category: selectedCatName,
             subCategory: selectedSubCatName,
-            specs: {}
+            specs: {},
+            addedBy: 'Company'
         };
 
         // Harvest dynamic fields
