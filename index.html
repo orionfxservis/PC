@@ -58,14 +58,35 @@
             <h1>Find the Best Price. <br> Every Time.</h1>
             <p>پاکستانیوں کے لیے قابلِ اعتماد قیمت گائیڈ</p>
 
-            <div class="search-panel">
-                <div class="search-box">
-                    <i class="fa-solid fa-location-dot location-icon" id="locationIcon"></i>
-                    <input type="text" id="productSearch" placeholder="What are you looking for today?">
-                    <button id="searchBtn"><i class="fa-solid fa-search"></i> Search</button>
+            <div class="advanced-search-panel">
+                <div class="search-group">
+                    <label for="searchCategory"><i id="catIcon" class="fa-solid fa-utensils"></i> Select
+                        Category</label>
+                    <select id="searchCategory">
+                        <option value="">Select Category...</option>
+                    </select>
                 </div>
-                <div id="locationStatus" class="location-status">Checking location...</div>
+                <div class="search-group">
+                    <label for="searchSubCategory"><i id="subCatIcon" class="fa-solid fa-list"></i> Select Item
+                        Type</label>
+                    <select id="searchSubCategory" disabled>
+                        <option value="">Select Sub Category...</option>
+                    </select>
+                </div>
+                <div class="search-group">
+                    <label for="searchProduct"><i class="fa-solid fa-magnifying-glass"></i> Select Product</label>
+                    <select id="searchProduct" disabled>
+                        <option value="">Select Product Type...</option>
+                    </select>
+                </div>
+                <div class="search-group">
+                    <label for="searchVariety"><i class="fa-solid fa-tags"></i> Product Variety</label>
+                    <select id="searchVariety" disabled>
+                        <option value="">Select Variety...</option>
+                    </select>
+                </div>
             </div>
+            <div id="locationStatus" class="location-status">Checking location...</div>
         </div>
     </section>
 

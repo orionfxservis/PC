@@ -60,6 +60,8 @@ function updateUI() {
     if (totalCategoriesEl) totalCategoriesEl.textContent = categories.length;
     if (totalProductsEl) totalProductsEl.textContent = products.length;
 
+    populateCategoryDropdown(); // Keep product dropdowns in sync
+
     // Render Categories
     if (categoryList) {
         categoryList.innerHTML = categories.map((cat, index) => {
@@ -234,25 +236,38 @@ window.addEventListener('load', initAdmin);
 function populateCategoryDropdown() {
     const prodCategorySelect = document.getElementById('prodCategory');
     if (prodCategorySelect) {
-        // user wants "Category" then "Sub Category".
-        // Assuming categories have unique names and mapped sub-categories.
-        // For now, simpler approach: List all unique category names.
         const uniqueCategories = [...new Set(categories.map(c => c.name))];
+        const currentSelection = prodCategorySelect.value;
+
         prodCategorySelect.innerHTML = '<option value="">Select Category</option>' +
             uniqueCategories.map(name => `<option value="${name}">${name}</option>`).join('');
 
+        if (uniqueCategories.includes(currentSelection)) {
+            prodCategorySelect.value = currentSelection;
+        }
+
         // Add listener
-        prodCategorySelect.addEventListener('change', () => {
+        prodCategorySelect.onchange = () => {
             const selectedCat = prodCategorySelect.value;
             const prodSubCategorySelect = document.getElementById('prodSubCategory');
             if (prodSubCategorySelect) {
                 // Filter sub-categories for this category name
                 const relevantCats = categories.filter(c => c.name === selectedCat);
-                // Assuming 'subCategory' is the field for Item Type
+                let subCats = [];
+                relevantCats.forEach(cat => {
+                    if (cat.subCategory) {
+                        subCats.push(...cat.subCategory.split(',').map(s => s.trim()).filter(s => s));
+                    }
+                });
+                const uniqueSubCats = [...new Set(subCats)];
+
                 prodSubCategorySelect.innerHTML = '<option value="">Select Sub Category</option>' +
-                    relevantCats.map((cat, index) => `<option value="${cat.subCategory}">${cat.subCategory}</option>`).join('');
+                    uniqueSubCats.map(sub => `<option value="${sub}">${sub}</option>`).join('');
             }
-        });
+        };
+
+        // Trigger manually to initialize or restore sub-category state
+        prodCategorySelect.onchange();
     }
 }
 

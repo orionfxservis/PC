@@ -13,19 +13,48 @@ const companyProductList = document.getElementById('companyProductList');
 // Load Categories into Select
 function loadCategories() {
     if (prodCategorySelect) {
+        const uniqueCategories = [...new Set(categories.map(c => c.name))];
         prodCategorySelect.innerHTML = '<option value="">Select Category</option>' +
-            categories.map((cat, index) => `<option value="${index}">${cat.name} - ${cat.subCategory}</option>`).join('');
+            uniqueCategories.map(name => `<option value="${name}">${name}</option>`).join('');
     }
 }
 
+// Load Sub Categories based on Category
+window.loadSubCategories = () => {
+    const selectedCat = prodCategorySelect.value;
+    const prodSubCategorySelect = document.getElementById('prodSubCategory');
+    dynamicFieldsContainer.innerHTML = ''; // clear dynamic fields
+
+    if (prodSubCategorySelect) {
+        if (!selectedCat) {
+            prodSubCategorySelect.innerHTML = '<option value="">Select Sub Category</option>';
+            return;
+        }
+
+        const relevantCats = categories.filter(c => c.name === selectedCat);
+        let subCats = [];
+        relevantCats.forEach(cat => {
+            if (cat.subCategory) {
+                subCats.push(...cat.subCategory.split(',').map(s => s.trim()).filter(s => s));
+            }
+        });
+        const uniqueSubCats = [...new Set(subCats)];
+
+        prodSubCategorySelect.innerHTML = '<option value="">Select Sub Category</option>' +
+            uniqueSubCats.map(sub => `<option value="${sub}">${sub}</option>`).join('');
+    }
+};
+
 // Load Dynamic Fields based on Category
 window.loadCategoryFields = () => {
-    const catIndex = prodCategorySelect.value;
+    const selectedCat = prodCategorySelect.value;
+    const selectedSubCat = document.getElementById('prodSubCategory').value;
     dynamicFieldsContainer.innerHTML = '';
 
-    if (catIndex === "") return;
+    if (!selectedCat || !selectedSubCat) return;
 
-    const category = categories[catIndex];
+    // We look for a matching category object in our original array to find its fields.
+    const category = categories.find(c => c.name === selectedCat && c.subCategory.includes(selectedSubCat)) || categories.find(c => c.name === selectedCat);
     if (category && category.fields) {
         category.fields.forEach(field => {
             const div = document.createElement('div');
@@ -52,16 +81,16 @@ if (productForm) {
     productForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const catIndex = prodCategorySelect.value;
-        const category = categories[catIndex];
+        const selectedCatName = prodCategorySelect.value;
+        const selectedSubCatName = document.getElementById('prodSubCategory').value;
 
         const newProduct = {
             id: Date.now(),
             name: document.getElementById('prodName').value,
             price: document.getElementById('prodPrice').value,
             image: document.getElementById('prodImage').value || 'https://via.placeholder.com/150',
-            category: category.name,
-            subCategory: category.subCategory,
+            category: selectedCatName,
+            subCategory: selectedSubCatName,
             specs: {}
         };
 

@@ -43,9 +43,17 @@
 
                         <div class="input-group">
                             <label>Category</label>
-                            <select id="prodCategory" onchange="loadCategoryFields()" required>
+                            <select id="prodCategory" onchange="loadSubCategories()" required>
                                 <option value="">Select Category</option>
                                 <!-- Categories injected here -->
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Sub Category</label>
+                            <select id="prodSubCategory" onchange="loadCategoryFields()" required>
+                                <option value="">Select Sub Category</option>
+                                <!-- Sub Categories injected here -->
                             </select>
                         </div>
 

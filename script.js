@@ -6,6 +6,12 @@ const closeBtn = document.querySelector('.close');
 const loginForm = document.getElementById('loginForm');
 const locationStatus = document.getElementById('locationStatus');
 const productGrid = document.getElementById('productGrid');
+const searchCategory = document.getElementById('searchCategory');
+const searchSubCategory = document.getElementById('searchSubCategory');
+const searchProduct = document.getElementById('searchProduct');
+const searchVariety = document.getElementById('searchVariety');
+const catIcon = document.getElementById('catIcon');
+const productsSection = document.getElementById('products');
 
 // State
 let currentSlide = 0;
@@ -101,13 +107,15 @@ loginForm.addEventListener('submit', async (e) => {
 });
 
 // Render Products
-function renderProducts() {
-    if (products.length === 0) {
-        productGrid.innerHTML = '<p style="text-align:center; width:100%; color:#888;">No products found.</p>';
+function renderProducts(productsToRender) {
+    if (!productsToRender || productsToRender.length === 0) {
+        productsSection.style.display = 'none';
+        productGrid.innerHTML = '';
         return;
     }
 
-    productGrid.innerHTML = products.map(product => `
+    productsSection.style.display = 'block';
+    productGrid.innerHTML = productsToRender.map(product => `
         <div class="product-card">
             <img src="${product.image}" alt="${product.name}">
             <div class="product-info">
@@ -118,12 +126,134 @@ function renderProducts() {
     `).join('');
 }
 
+// Search Dropdown Logic
+const categoryIcons = {
+    'Food': 'fa-utensils',
+    'Electronics': 'fa-laptop',
+    'Vehicles': 'fa-car',
+    'Clothing': 'fa-shirt',
+    'default': 'fa-list' // Fallback
+};
+
+function initSearchDropdowns() {
+    if (!searchCategory) return;
+
+    // Populate Categories
+    const uniqueCategories = [...new Set(products.map(p => p.category).filter(c => c))];
+    searchCategory.innerHTML = '<option value="">Select Category...</option>' +
+        uniqueCategories.map(c => `<option value="${c}">${c}</option>`).join('');
+
+    searchCategory.addEventListener('change', () => {
+        const cat = searchCategory.value;
+        searchSubCategory.innerHTML = '<option value="">Select Item Type...</option>';
+        searchProduct.innerHTML = '<option value="">Select Product Type...</option>';
+        searchVariety.innerHTML = '<option value="">Select Variety...</option>';
+
+        searchSubCategory.disabled = !cat;
+        searchProduct.disabled = true;
+        searchVariety.disabled = true;
+
+        if (cat) {
+            // Update icon
+            if (catIcon) catIcon.className = 'fa-solid ' + (categoryIcons[cat] || categoryIcons['default']);
+
+            const subCatIcon = document.getElementById('subCatIcon');
+            if (subCatIcon) {
+                if (cat === 'Food') {
+                    subCatIcon.className = 'fa-solid fa-list-alt'; // Menu Card look
+                } else {
+                    subCatIcon.className = 'fa-solid fa-list';
+                }
+            }
+
+            // Populate subcategories
+            const relevantProducts = products.filter(p => p.category === cat);
+            const uniqueSubCats = [...new Set(relevantProducts.map(p => p.subCategory).filter(s => s))];
+            searchSubCategory.innerHTML += uniqueSubCats.map(sc => `<option value="${sc}">${sc}</option>`).join('');
+        } else {
+            if (catIcon) catIcon.className = 'fa-solid fa-list';
+            const subCatIcon = document.getElementById('subCatIcon');
+            if (subCatIcon) subCatIcon.className = 'fa-solid fa-list';
+        }
+        filterProducts();
+    });
+
+    searchSubCategory.addEventListener('change', () => {
+        const cat = searchCategory.value;
+        const subCat = searchSubCategory.value;
+
+        searchProduct.innerHTML = '<option value="">Select Product Type...</option>';
+        searchVariety.innerHTML = '<option value="">Select Variety...</option>';
+
+        searchProduct.disabled = !subCat;
+        searchVariety.disabled = true;
+
+        if (subCat) {
+            const relevantProducts = products.filter(p => p.category === cat && p.subCategory === subCat);
+            const uniqueProductNames = [...new Set(relevantProducts.map(p => p.name).filter(n => n))];
+            searchProduct.innerHTML += uniqueProductNames.map(n => `<option value="${n}">${n}</option>`).join('');
+        }
+        filterProducts();
+    });
+
+    searchProduct.addEventListener('change', () => {
+        const cat = searchCategory.value;
+        const subCat = searchSubCategory.value;
+        const prodName = searchProduct.value;
+
+        searchVariety.innerHTML = '<option value="">Select Variety...</option>';
+        searchVariety.disabled = !prodName;
+
+        if (prodName) {
+            const relevantProducts = products.filter(p => p.category === cat && p.subCategory === subCat && p.name === prodName);
+            const uniqueVarieties = [...new Set(relevantProducts.map(p => p.variety).filter(v => v))];
+            if (uniqueVarieties.length > 0) {
+                searchVariety.innerHTML += uniqueVarieties.map(v => `<option value="${v}">${v}</option>`).join('');
+            } else {
+                searchVariety.disabled = true; // No varieties for this product
+            }
+        }
+        filterProducts();
+    });
+
+    searchVariety.addEventListener('change', filterProducts);
+}
+
+function filterProducts() {
+    const cat = searchCategory.value;
+    const subCat = searchSubCategory.value;
+    const prodName = searchProduct.value;
+    const variety = searchVariety.value;
+
+    if (!cat && !subCat && !prodName && !variety) {
+        renderProducts([]); // Hide if empty
+        return;
+    }
+
+    let filtered = products;
+    if (cat) filtered = filtered.filter(p => p.category === cat);
+    if (subCat) filtered = filtered.filter(p => p.subCategory === subCat);
+    if (prodName) filtered = filtered.filter(p => p.name === prodName);
+    if (variety) filtered = filtered.filter(p => p.variety === variety);
+
+    if (filtered.length === 0) {
+        productsSection.style.display = 'block';
+        productGrid.innerHTML = '<p style="text-align:center; width:100%; color:#888;">No products found for this selection.</p>';
+    } else {
+        renderProducts(filtered);
+    }
+}
+
 // Init
 async function init() {
     checkLocation();
+
+    // Initially hide the products section
+    if (productsSection) productsSection.style.display = 'none';
+
     try {
         products = await DataService.getProducts();
-        renderProducts();
+        initSearchDropdowns();
     } catch (error) {
         console.error("Failed to load products:", error);
     }
