@@ -1,15 +1,67 @@
 function doGet(e) {
-  let page = e.parameter.page;
-  if (!page) {
+  // If no action parameter, return standard dashboard for direct viewing
+  if (!e.parameter.action && !e.parameter.page) {
     return HtmlService.createTemplateFromFile('index').evaluate()
         .setTitle('Qeemat Point')
         .addMetaTag('viewport', 'width=device-width, initial-scale=1')
         .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
   }
-  return HtmlService.createTemplateFromFile(page).evaluate()
-      .setTitle('Qeemat Point - ' + page.charAt(0).toUpperCase() + page.slice(1))
-      .addMetaTag('viewport', 'width=device-width, initial-scale=1')
-      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  
+  if (e.parameter.page) {
+     return HtmlService.createTemplateFromFile(e.parameter.page).evaluate()
+        .setTitle('Qeemat Point - ' + e.parameter.page.charAt(0).toUpperCase() + e.parameter.page.slice(1))
+        .addMetaTag('viewport', 'width=device-width, initial-scale=1')
+        .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  }
+
+  // Handle REST API GET requests
+  const action = e.parameter.action;
+  
+  switch(action) {
+    case 'getProducts':
+      return createJsonResponse(getProducts());
+    case 'getCategories':
+      return createJsonResponse(getCategories());
+    case 'getBanners':
+      return createJsonResponse(getBanners());
+    case 'getUsers':
+      return createJsonResponse(getUsers());
+    default:
+      return createJsonResponse({error: "Invalid action payload"}, 400);
+  }
+}
+
+function doPost(e) {
+  let requestData;
+  try {
+    requestData = JSON.parse(e.postData.contents);
+  } catch (err) {
+    return createJsonResponse({error: "Invalid JSON format"}, 400);
+  }
+
+  const action = requestData.action;
+  const payload = requestData.payload;
+
+  switch(action) {
+    case 'saveProducts':
+      return createJsonResponse({ message: saveProducts(payload) });
+    case 'saveCategories':
+      return createJsonResponse({ message: saveCategories(payload) });
+    case 'saveBanners':
+      return createJsonResponse({ message: saveBanners(payload) });
+    case 'saveUsers':
+        return createJsonResponse({ message: saveUsers(payload) });
+    case 'login':
+      return createJsonResponse(loginUser(payload.username, payload.password, payload.type));
+    default:
+      return createJsonResponse({error: "Invalid action payload"}, 400);
+  }
+}
+
+function createJsonResponse(data, status = 200) {
+  const output = ContentService.createTextOutput(JSON.stringify(data));
+  output.setMimeType(ContentService.MimeType.JSON);
+  return output;
 }
 
 function include(filename) {

@@ -5,7 +5,7 @@
 
 const DataService = {
     // ⚠️ CRITICAL: Replace this URL with your NEW DEPLOYMENT Web App URL from Google!
-    API_URL: 'https://script.google.com/macros/s/AKfycbzwzrDrmXt32EEqR213HnxJ_frHznbTjlE6OQzOpAp_414mcd-Bh9RqGRsausAlvINl/exec',
+    API_URL: 'https://script.google.com/macros/s/AKfycbybHovvVvCns41k7vDk9_xG4c-i7_7aB-4U-wF-9B6s/dev',
 
     // --- Helpers ---
 
@@ -27,7 +27,7 @@ const DataService = {
             const response = await fetch(DataService.API_URL, {
                 method: 'POST',
                 // Using text/plain avoids some CORS preflight issues with Google Apps Script
-                headers: { 'Content-Type': 'text/plain' }, 
+                headers: { 'Content-Type': 'text/plain' },
                 body: JSON.stringify({ action: action, payload: payload })
             });
             if (!response.ok) throw new Error('Network response was not ok');

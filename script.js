@@ -119,6 +119,8 @@ function renderProducts(productsToRender) {
         let details = product.subCategory || '';
         if (product.category === 'Vehicles' || product.category === 'Vehicle') {
             details = `${product.year || ''} Model ${product.condition ? '(' + product.condition + ')' : ''} | ${product.kMs || product.kms || 0} km`;
+        } else if (product.category === 'Mobiles') {
+            details = `${product.specification || ''} | ${product.batteryBackup ? product.batteryBackup + 'mAh' : ''}`;
         } else if (product.variety) {
             details += ` - ${product.variety}`;
         }

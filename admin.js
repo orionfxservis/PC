@@ -438,6 +438,92 @@ function renderDynamicAdminFields() {
                 </div>
             </div>
         `;
+    } else if (category === 'Mobiles' && subCategory === 'Mobile Phones') {
+        container.innerHTML = `
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Mobile Name / Title</label>
+                    <input type="text" id="prodName" class="dynamic-admin-field" placeholder="e.g., iPhone 13 Pro" required>
+                </div>
+                <div class="input-group">
+                    <label>Brand</label>
+                    <select id="prodBrand" class="dynamic-admin-field" required>
+                        <option value="">Select Brand</option>
+                        <option value="Apple">Apple</option>
+                        <option value="Samsung">Samsung</option>
+                        <option value="Xiaomi">Xiaomi</option>
+                        <option value="Oppo">Oppo</option>
+                        <option value="Vivo">Vivo</option>
+                        <option value="Realme">Realme</option>
+                        <option value="Infinix">Infinix</option>
+                        <option value="Tecno">Tecno</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Operating System (OS)</label>
+                    <select id="prodOs" class="dynamic-admin-field" required>
+                        <option value="">Select OS</option>
+                        <option value="Android">Android</option>
+                        <option value="iOS">iOS</option>
+                        <option value="HarmonyOS">HarmonyOS</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Specification</label>
+                    <select id="prodSpecification" class="dynamic-admin-field" required>
+                        <option value="">Select Specification</option>
+                        <option value="4GB/64GB">4GB / 64GB</option>
+                        <option value="4GB/128GB">4GB / 128GB</option>
+                        <option value="6GB/128GB">6GB / 128GB</option>
+                        <option value="8GB/128GB">8GB / 128GB</option>
+                        <option value="8GB/256GB">8GB / 256GB</option>
+                        <option value="12GB/256GB">12GB / 256GB</option>
+                        <option value="12GB/512GB">12GB / 512GB</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Screen Size (inches)</label>
+                    <input type="number" step="0.1" id="prodScreenSize" class="dynamic-admin-field" placeholder="e.g., 6.7" required>
+                </div>
+                <div class="input-group">
+                    <label>Battery Backup (mAh)</label>
+                    <input type="number" id="prodBatteryBackup" class="dynamic-admin-field" placeholder="e.g., 5000" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Warranty</label>
+                    <select id="prodWarranty" class="dynamic-admin-field" required>
+                        <option value="">Select Warranty</option>
+                        <option value="None">None</option>
+                        <option value="1 Month">1 Month</option>
+                        <option value="6 Months">6 Months</option>
+                        <option value="1 Year">1 Year</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Make / Year</label>
+                    <input type="text" id="prodMake" class="dynamic-admin-field" placeholder="e.g., 2023" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Location / City</label>
+                    <input type="text" id="prodLocation" class="dynamic-admin-field" placeholder="e.g., Lahore" required>
+                </div>
+                <div class="input-group">
+                    <label>Price (Rs.)</label>
+                    <input type="number" id="prodPrice" class="dynamic-admin-field" placeholder="e.g., 150000" required>
+                </div>
+            </div>
+        `;
     } else {
         // Default to Food / Other fields
         container.innerHTML = `
@@ -579,6 +665,8 @@ function renderAdminProducts() {
             let details = prod.variety || '';
             if (prod.category === 'Vehicles' || prod.category === 'Vehicle') {
                 details = `${prod.year || ''} Model | ${prod.kMs || prod.kms || 0} km`;
+            } else if (prod.category === 'Mobiles') {
+                details = `${prod.specification || ''} | ${prod.batteryBackup ? prod.batteryBackup + 'mAh' : ''}`;
             }
 
             return `
