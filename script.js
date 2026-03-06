@@ -115,15 +115,25 @@ function renderProducts(productsToRender) {
     }
 
     productsSection.style.display = 'block';
-    productGrid.innerHTML = productsToRender.map(product => `
+    productGrid.innerHTML = productsToRender.map(product => {
+        let details = product.subCategory || '';
+        if (product.category === 'Vehicles' || product.category === 'Vehicle') {
+            details = `${product.year || ''} Model ${product.condition ? '(' + product.condition + ')' : ''} | ${product.kMs || product.kms || 0} km`;
+        } else if (product.variety) {
+            details += ` - ${product.variety}`;
+        }
+
+        return `
         <div class="product-card">
             <img src="${product.image}" alt="${product.name}">
             <div class="product-info">
                 <h3>${product.name}</h3>
+                <p style="font-size: 0.9em; color: #666; margin-bottom: 5px;">${details}</p>
                 <p class="price">Rs. ${product.price}</p>
             </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 // Search Dropdown Logic

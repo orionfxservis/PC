@@ -39,11 +39,6 @@
                 <div class="form-container">
                     <form id="productForm">
                         <div class="input-group">
-                            <label>Product Name</label>
-                            <input type="text" id="prodName" required>
-                        </div>
-
-                        <div class="input-group">
                             <label>Category</label>
                             <select id="prodCategory" onchange="loadSubCategories()" required>
                                 <option value="">Select Category</option>
@@ -60,18 +55,12 @@
                         </div>
 
                         <div class="input-group">
-                            <label>Price (Rs.)</label>
-                            <input type="number" id="prodPrice" required>
-                        </div>
-
-                        <div class="input-group">
                             <label>Image URL</label>
                             <input type="url" id="prodImage" placeholder="https://example.com/image.jpg">
                         </div>
 
-                        <div id="dynamicFields">
-                            <!-- Fields specific to category injected here -->
-                        </div>
+                        <!-- Dynamic Fields specific to category injected here -->
+                        <div id="dynamicFields"></div>
 
                         <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Publish
                             Product</button>
