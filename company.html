@@ -7,6 +7,8 @@
     <title>Company Dashboard - Qeemat Point</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="admin.css"> <!-- Reusing admin styles -->
+    <?!= include('style'); ?>
+    <?!= include('admin_css'); ?>
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap"
         rel="stylesheet">
@@ -95,8 +97,12 @@
         </main>
     </div>
 
+    <!-- Local scripts (Ignored in GAS, but work locally) -->
     <script src="data-service.js"></script>
     <script src="company.js"></script>
+    <!-- GAS scripts (Loaded dynamically in Apps Script) -->
+    <?!= include('data-service'); ?>
+    <?!= include('company_js'); ?>
 </body>
 
 </html>

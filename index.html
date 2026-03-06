@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qeemat Point - Compare & Save</title>
     <link rel="stylesheet" href="style.css">
+    <?!= include('style'); ?>
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap"
         rel="stylesheet">
@@ -126,8 +127,12 @@
         </div>
     </div>
 
+    <!-- Local scripts (Ignored in GAS, but work locally) -->
     <script src="data-service.js"></script>
     <script src="script.js"></script>
+    <!-- GAS scripts (Loaded dynamically in Apps Script) -->
+    <?!= include('data-service'); ?>
+    <?!= include('script'); ?>
 </body>
 
 </html>
