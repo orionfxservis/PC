@@ -122,34 +122,48 @@ body {
     }
 }
 
-/* Deal of the Day Navbar Link */
-.deal-nav-link {
-    color: #ff4757 !important;
-    /* Bright red/orange for fire */
-    font-weight: 700 !important;
-    animation: flashText 2s infinite;
-    display: flex;
+/* Deal of the Day Hero Button */
+.deal-hero-btn {
+    display: inline-flex;
     align-items: center;
-    gap: 5px;
-    background: rgba(255, 71, 87, 0.1);
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 71, 87, 0.3);
+    gap: 8px;
+    background: rgba(255, 71, 87, 0.15);
+    /* lighter inner */
+    color: #fff !important;
+    font-size: 1rem;
+    font-weight: 400 !important;
+    /* normal font */
+    padding: 8px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    margin-top: 25px;
+    border: 1px solid rgba(255, 71, 87, 0.8);
+    /* pink outline */
+    transition: all 0.3s ease;
 }
 
-.deal-nav-link i {
+.deal-hero-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    background: rgba(255, 71, 87, 0.25);
+    box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+}
+
+.deal-hero-btn i {
     animation: fireFloat 1s infinite alternate;
+    font-size: 1.1rem;
+    color: #ffd32a;
+    /* Goldish fire */
 }
 
-@keyframes flashText {
+@keyframes pulseGlow {
 
     0%,
     100% {
-        text-shadow: 0 0 5px rgba(255, 71, 87, 0.5);
+        box-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
     }
 
     50% {
-        text-shadow: 0 0 15px rgba(255, 71, 87, 1);
+        box-shadow: 0 0 25px rgba(255, 71, 87, 0.9);
     }
 }
 

@@ -5,7 +5,7 @@
 
 const DataService = {
     // ⚠️ CRITICAL: Replace this URL with your NEW DEPLOYMENT Web App URL from Google!
-    API_URL: 'https://script.google.com/macros/s/AKfycbxInVbxYtkzS-Mlp4c3Iw1SIDTG1RSHzwG7za01VY6ZZZcjifFG5efaTD2jN9ZptoeQ/exec',
+    API_URL: 'https://script.google.com/macros/s/AKfycbzJLWvKN0j0gHy_A05_Tbp7tyAKotWE7jF2QvNj51L0-naRp56tKNtx6i1Cm9d0tfcf/exec',
 
     // --- Helpers ---
 
@@ -91,6 +91,15 @@ const DataService = {
 
     // --- Users / Auth ---
 
+    getUsers: async () => {
+        return await DataService._fetchGET('getUsers');
+    },
+
+    saveUsers: async (users) => {
+        const res = await DataService._fetchPOST('saveUsers', users);
+        return res.message;
+    },
+
     login: async (username, password, type) => {
         try {
             const res = await DataService._fetchPOST('login', { username, password, type });
@@ -100,7 +109,7 @@ const DataService = {
             console.warn("Using local stub login due to API failure");
             if (type === 'admin') {
                 if ((username === 'Faisal' && password === '1234') ||
-                    (username === 'Ashraf' && password === '1234')) {
+                    (username === 'Ashraf Taj' && password === 'admin123')) {
                     return { success: true, user: { username, role: 'admin' } };
                 }
             } else if (type === 'company') {

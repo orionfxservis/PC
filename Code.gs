@@ -218,10 +218,13 @@ function loginUser(username, password, type) {
     const users = getUsers();
     const user = users.find(u => u.username === username && u.password === password && u.role === type);
     if (user) {
+        if (user.status === 'hold') {
+            return { success: false, message: 'Account is on hold. Please contact support.' };
+        }
         return { success: true, user: user };
     }
     // Fallback for hardcoded admin
-    if (type === 'admin' && ((username === 'Faisal' && password === '1234') || (username === 'Ashraf' && password === '1234'))) {
+    if (type === 'admin' && ((username === 'Faisal' && password === '1234') || (username === 'Ashraf Taj' && password === 'admin123'))) {
          return { success: true, user: { username, role: 'admin' } };
     }
     return { success: false, message: 'Invalid credentials' };

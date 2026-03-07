@@ -5,7 +5,9 @@ let categories = [];
 let products = [];
 let banners = [];
 let deals = [];
+let users = [];
 let editIndex = -1; // State to track editing
+let userEditIndex = -1; // State to track user editing
 
 // DOM Elements
 const categoryForm = document.getElementById('categoryForm');
@@ -26,16 +28,18 @@ const bannerPreview = document.getElementById('bannerPreview');
 
 async function initAdmin() {
     try {
-        [categories, products, banners, deals] = await Promise.all([
+        [categories, products, banners, deals, users] = await Promise.all([
             DataService.getCategories(),
             DataService.getProducts(),
             DataService.getBanners(),
-            DataService.getDeals()
+            DataService.getDeals(),
+            DataService.getUsers()
         ]);
 
         updateUI();
         renderBanners();
         renderDeals();
+        renderUsers();
         renderAdminProducts(); // New function for products
         populateCategoryDropdown(); // New function for form
 
@@ -275,6 +279,95 @@ if (dealForm) {
         alert('Deal added successfully!');
     });
 }
+
+// --- Users Functions ---
+const userForm = document.getElementById('userForm');
+const userList = document.getElementById('userList');
+const userFormTitle = document.getElementById('userFormTitle');
+const btnCancelUser = document.getElementById('btnCancelUser');
+const btnSaveUser = document.getElementById('btnSaveUser');
+
+async function saveUsers() {
+    await DataService.saveUsers(users);
+    renderUsers();
+}
+
+function renderUsers() {
+    if (!userList) return;
+    userList.innerHTML = users.map((u, index) => `
+        <tr>
+            <td>${u.username}</td>
+            <td>**********</td>
+            <td><span class="badge" style="background:#3498db; color:white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">${u.role}</span></td>
+            <td><span class="badge" style="background:${u.status === 'active' ? '#2ecc71' : '#f1c40f'}; color:white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">${u.status}</span></td>
+            <td>
+                <button class="edit-btn" onclick="editUser(${index})"><i class="fa-solid fa-pen"></i></button>
+                <button class="delete-btn" onclick="deleteUser(${index})"><i class="fa-solid fa-trash"></i></button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+async function deleteUser(index) {
+    if (confirm('Delete this user?')) {
+        users.splice(index, 1);
+        await saveUsers();
+    }
+}
+
+window.editUser = (index) => {
+    userEditIndex = index;
+    const user = users[index];
+
+    document.getElementById('userName').value = user.username;
+    document.getElementById('userPassword').value = user.password;
+    document.getElementById('userRole').value = user.role || 'user';
+    document.getElementById('userStatus').value = user.status || 'active';
+
+    userFormTitle.textContent = "Edit User Rights";
+    btnSaveUser.textContent = "Update User";
+    btnCancelUser.style.display = 'inline-block';
+
+    document.getElementById('users').querySelector('.form-container').scrollIntoView({ behavior: 'smooth' });
+};
+
+window.cancelUserEdit = () => {
+    userEditIndex = -1;
+    userForm.reset();
+    userFormTitle.textContent = "Add New User";
+    btnSaveUser.textContent = "Save User";
+    btnCancelUser.style.display = 'none';
+};
+
+if (userForm) {
+    userForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const userData = {
+            username: document.getElementById('userName').value,
+            password: document.getElementById('userPassword').value,
+            role: document.getElementById('userRole').value,
+            status: document.getElementById('userStatus').value
+        };
+
+        if (userEditIndex === -1) {
+            // Check if username already exists
+            if (users.some(u => u.username === userData.username && u.role === userData.role)) {
+                alert('A user with this username and role already exists!');
+                return;
+            }
+            users.push(userData);
+        } else {
+            users[userEditIndex] = userData;
+            cancelUserEdit(); // Reset form state
+        }
+
+        await saveUsers();
+        if (userEditIndex === -1) userForm.reset();
+        alert('User saved successfully!');
+    });
+}
+
 
 // Navigation
 function showSection(sectionId) {
