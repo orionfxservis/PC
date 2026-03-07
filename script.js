@@ -256,6 +256,34 @@ function filterProducts() {
     }
 }
 
+// Category Card Click Handler
+window.setSearchCategory = (categoryName) => {
+    if (searchCategory) {
+        // Find if the category exists in the dropdown options
+        let optionExists = false;
+        for (let i = 0; i < searchCategory.options.length; i++) {
+            if (searchCategory.options[i].value === categoryName) {
+                optionExists = true;
+                break;
+            }
+        }
+
+        // Even if it doesn't currently exist in the database, we can set it so it shows 'No products found' properly
+        if (!optionExists) {
+            const newOption = new Option(categoryName, categoryName);
+            searchCategory.add(newOption);
+        }
+
+        searchCategory.value = categoryName;
+        // Trigger the change event manually to update subcategories and filter
+        const event = new Event('change');
+        searchCategory.dispatchEvent(event);
+
+        // Scroll to the products section
+        productsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+};
+
 // Init
 async function init() {
     checkLocation();

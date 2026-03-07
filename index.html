@@ -55,42 +55,85 @@
             </div>
         </div>
 
-        <div class="hero-content">
-            <h1>Find the Best Price. <br> Every Time.</h1>
-            <p>پاکستانیوں کے لیے قابلِ اعتماد قیمت گائیڈ</p>
-
-            <div class="advanced-search-panel">
-                <div class="search-group">
-                    <label for="searchCategory"><i id="catIcon" class="fa-solid fa-utensils"></i> Select
-                        Category</label>
-                    <select id="searchCategory">
-                        <option value="">Select Category...</option>
-                    </select>
+        <div class="hero-overlay-grid">
+            <!-- Left Side Categories -->
+            <div class="hero-categories">
+                <div class="hero-cat-circle" onclick="setSearchCategory('Food')">
+                    <i class="fa-solid fa-utensils"></i>
+                    <span>Food</span>
                 </div>
-                <div class="search-group">
-                    <label for="searchSubCategory"><i id="subCatIcon" class="fa-solid fa-list"></i> Select Item
-                        Type</label>
-                    <select id="searchSubCategory" disabled>
-                        <option value="">Select Sub Category...</option>
-                    </select>
+                <div class="hero-cat-circle" onclick="setSearchCategory('Mobiles')">
+                    <i class="fa-solid fa-mobile-screen"></i>
+                    <span>Mobiles</span>
                 </div>
-                <div class="search-group">
-                    <label for="searchProduct"><i class="fa-solid fa-magnifying-glass"></i> Select Product</label>
-                    <select id="searchProduct" disabled>
-                        <option value="">Select Product Type...</option>
-                    </select>
+                <div class="hero-cat-circle" onclick="setSearchCategory('Laptops')">
+                    <i class="fa-solid fa-laptop"></i>
+                    <span>Laptops</span>
                 </div>
-                <div class="search-group">
-                    <label for="searchVariety"><i class="fa-solid fa-tags"></i> Product Variety</label>
-                    <select id="searchVariety" disabled>
-                        <option value="">Select Variety...</option>
-                    </select>
+                <div class="hero-cat-circle" onclick="setSearchCategory('LED / TV')">
+                    <i class="fa-solid fa-tv"></i>
+                    <span>LED / TV</span>
                 </div>
             </div>
-            <div id="locationStatus" class="location-status">Checking location...</div>
+
+            <div class="hero-content">
+                <h1 style="font-size: 2.8rem;">Compare Prices Before You Buy – Save Your Money!</h1>
+                <p style="font-size: 1.5rem; margin-bottom: 15px;">Check latest prices from multiple stores in Pakistan.
+                </p>
+                <p>پاکستانیوں کے لیے قابلِ اعتماد قیمت گائیڈ</p>
+
+                <div class="advanced-search-panel">
+                    <div class="search-group">
+                        <label for="searchCategory"><i id="catIcon" class="fa-solid fa-utensils"></i> Select
+                            Category</label>
+                        <select id="searchCategory">
+                            <option value="">Select Category...</option>
+                        </select>
+                    </div>
+                    <div class="search-group">
+                        <label for="searchSubCategory"><i id="subCatIcon" class="fa-solid fa-list"></i> Select Item
+                            Type</label>
+                        <select id="searchSubCategory" disabled>
+                            <option value="">Select Sub Category...</option>
+                        </select>
+                    </div>
+                    <div class="search-group">
+                        <label for="searchProduct"><i class="fa-solid fa-magnifying-glass"></i> Select Product</label>
+                        <select id="searchProduct" disabled>
+                            <option value="">Select Product Type...</option>
+                        </select>
+                    </div>
+                    <div class="search-group">
+                        <label for="searchVariety"><i class="fa-solid fa-tags"></i> Product Variety</label>
+                        <select id="searchVariety" disabled>
+                            <option value="">Select Variety...</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="locationStatus" class="location-status">Checking location...</div>
+            </div>
+
+            <!-- Right Side Categories -->
+            <div class="hero-categories">
+                <div class="hero-cat-circle" onclick="setSearchCategory('Home Appliances')">
+                    <i class="fa-solid fa-blender"></i>
+                    <span>Home Apps</span>
+                </div>
+                <div class="hero-cat-circle" onclick="setSearchCategory('Used Products')">
+                    <i class="fa-solid fa-recycle"></i>
+                    <span>Used Items</span>
+                </div>
+                <div class="hero-cat-circle" onclick="setSearchCategory('Gaming Accessories')">
+                    <i class="fa-solid fa-gamepad"></i>
+                    <span>Gaming</span>
+                </div>
+                <div class="hero-cat-circle" onclick="setSearchCategory('Vehicles')">
+                    <i class="fa-solid fa-car"></i>
+                    <span>Cars</span>
+                </div>
+            </div>
         </div>
     </section>
-
     <!-- Product Grid Placeholder -->
     <section id="products" class="products-section">
         <h2>Available Options</h2>

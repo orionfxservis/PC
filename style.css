@@ -193,8 +193,10 @@ body {
 .hero-content {
     text-align: center;
     z-index: 10;
-    max-width: 800px;
-    padding: 20px;
+    flex: 1;
+    /* Take up remaining space between sidebars */
+    max-width: 900px;
+    padding: 0 20px;
 }
 
 .hero-content h1 {
@@ -280,6 +282,179 @@ body {
     color: var(--accent-color);
     margin-top: 15px;
     height: 20px;
+}
+
+/* Hero Layout Grid for Floating Categories */
+.hero-overlay-grid {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    margin-top: 60px;
+    /* Account for navbar */
+}
+
+.hero-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.hero-cat-circle {
+    width: 85px;
+    height: 85px;
+    background: rgba(30, 30, 30, 0.6);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    transform: translateZ(0);
+    /* Hardware acceleration */
+}
+
+/* Animated Outer Line */
+.hero-cat-circle::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    z-index: -1;
+    transition: all 0.3s ease;
+}
+
+/* Left Side Categories (Float Right, Spin Right) */
+.hero-categories:first-child .hero-cat-circle {
+    animation: floatRight 6s ease-in-out infinite;
+}
+
+.hero-categories:first-child .hero-cat-circle::before {
+    animation: spinRight 12s linear infinite;
+}
+
+/* Right Side Categories (Float Left, Spin Left) */
+.hero-categories:last-child .hero-cat-circle {
+    animation: floatLeft 6s ease-in-out infinite;
+}
+
+.hero-categories:last-child .hero-cat-circle::before {
+    animation: spinLeft 12s linear infinite;
+}
+
+/* Stagger animations slightly for a more organic feel */
+.hero-categories .hero-cat-circle:nth-child(2) {
+    animation-delay: -1.5s;
+}
+
+.hero-categories .hero-cat-circle:nth-child(2)::before {
+    animation-delay: -2s;
+}
+
+.hero-categories .hero-cat-circle:nth-child(3) {
+    animation-delay: -3s;
+}
+
+.hero-categories .hero-cat-circle:nth-child(3)::before {
+    animation-delay: -4s;
+}
+
+.hero-categories .hero-cat-circle:nth-child(4) {
+    animation-delay: -4.5s;
+}
+
+.hero-categories .hero-cat-circle:nth-child(4)::before {
+    animation-delay: -6s;
+}
+
+@keyframes spinRight {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spinLeft {
+    100% {
+        transform: rotate(-360deg);
+    }
+}
+
+@keyframes floatRight {
+
+    0%,
+    100% {
+        transform: translateX(0) scale(1);
+    }
+
+    50% {
+        transform: translateX(8px) scale(1.02);
+    }
+}
+
+@keyframes floatLeft {
+
+    0%,
+    100% {
+        transform: translateX(0) scale(1);
+    }
+
+    50% {
+        transform: translateX(-8px) scale(1.02);
+    }
+}
+
+.hero-cat-circle i {
+    font-size: 1.6rem;
+    color: var(--accent-color);
+    margin-bottom: 5px;
+    transition: all 0.4s ease;
+}
+
+.hero-cat-circle span {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    transition: color 0.3s;
+    line-height: 1.1;
+}
+
+/* Hover Animations */
+.hero-cat-circle:hover {
+    animation-play-state: paused;
+    /* Pause float on hover */
+    transform: scale(1.1) translateY(-5px);
+    background: rgba(40, 40, 40, 0.8);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(204, 164, 59, 0.3);
+}
+
+.hero-cat-circle:hover::before {
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 10px rgba(204, 164, 59, 0.5);
+    animation-play-state: paused;
+}
+
+.hero-cat-circle:hover i {
+    color: var(--primary-color);
+    transform: scale(1.15) rotate(5deg);
+    text-shadow: 0 0 10px rgba(204, 164, 59, 0.4);
+}
+
+.hero-cat-circle:hover span {
+    color: var(--primary-color);
 }
 
 /* Products Section */
