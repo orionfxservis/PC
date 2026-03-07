@@ -4,6 +4,7 @@
 let categories = [];
 let products = [];
 let banners = [];
+let deals = [];
 let editIndex = -1; // State to track editing
 
 // DOM Elements
@@ -25,14 +26,16 @@ const bannerPreview = document.getElementById('bannerPreview');
 
 async function initAdmin() {
     try {
-        [categories, products, banners] = await Promise.all([
+        [categories, products, banners, deals] = await Promise.all([
             DataService.getCategories(),
             DataService.getProducts(),
-            DataService.getBanners()
+            DataService.getBanners(),
+            DataService.getDeals()
         ]);
 
         updateUI();
         renderBanners();
+        renderDeals();
         renderAdminProducts(); // New function for products
         populateCategoryDropdown(); // New function for form
 
@@ -211,6 +214,65 @@ if (bannerForm) {
         await saveBanners();
         bannerForm.reset();
         updateBannerPreview();
+    });
+}
+
+// --- Deals Functions ---
+const dealForm = document.getElementById('dealForm');
+const dealList = document.getElementById('dealList');
+
+async function saveDeals() {
+    await DataService.saveDeals(deals);
+    renderDeals();
+}
+
+function renderDeals() {
+    if (!dealList) return;
+    dealList.innerHTML = deals.map((deal, index) => `
+        <div class="product-row" style="grid-template-columns: 80px 2fr 1fr 80px;">
+            <img src="${deal.image}" alt="${deal.name}" style="width: 100%; height: 60px; object-fit: cover; border-radius: 8px;">
+            <div>
+                <strong>${deal.name}</strong> <span class="badge" style="background:#ff4757; color:white; padding:2px 6px; font-size:0.7rem; border-radius:10px;">${deal.badge}</span><br>
+                <small style="color: #aaa;">${deal.desc}</small>
+            </div>
+            <div>
+                <span style="color: var(--primary-color); font-weight:bold;">${deal.price}</span><br>
+                <small><i class="fa-solid fa-location-dot"></i> ${deal.location}</small>
+            </div>
+            <div>
+                <button class="delete-btn" onclick="deleteDeal(${index})"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </div>
+    `).join('');
+}
+
+async function deleteDeal(index) {
+    if (confirm('Delete this deal?')) {
+        deals.splice(index, 1);
+        await saveDeals();
+    }
+}
+
+if (dealForm) {
+    dealForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const newDeal = {
+            id: Date.now(),
+            name: document.getElementById('dealName').value,
+            badge: document.getElementById('dealBadge').value,
+            image: document.getElementById('dealImage').value,
+            desc: document.getElementById('dealDesc').value,
+            price: document.getElementById('dealPrice').value,
+            location: document.getElementById('dealLocation').value,
+            whatsapp: document.getElementById('dealWhatsapp').value,
+            video: document.getElementById('dealVideo').value
+        };
+
+        deals.push(newDeal);
+        await saveDeals();
+        dealForm.reset();
+        alert('Deal added successfully!');
     });
 }
 

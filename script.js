@@ -1,23 +1,35 @@
 // DOM Elements
 const slides = document.querySelectorAll('.slide');
-const loginBtn = document.getElementById('loginBtn');
-const loginModal = document.getElementById('loginModal');
-const closeBtn = document.querySelector('.close');
-const loginForm = document.getElementById('loginForm');
-const locationStatus = document.getElementById('locationStatus');
+
+// UI Elements
 const productGrid = document.getElementById('productGrid');
 const searchCategory = document.getElementById('searchCategory');
 const searchSubCategory = document.getElementById('searchSubCategory');
 const searchProduct = document.getElementById('searchProduct');
 const searchVariety = document.getElementById('searchVariety');
 const catIcon = document.getElementById('catIcon');
+const subCatIcon = document.getElementById('subCatIcon');
 const productsSection = document.getElementById('products');
+const locationStatus = document.getElementById('locationStatus');
+const loginForm = document.getElementById('loginForm');
+
+// Login Modal Elements
+const loginModal = document.getElementById('loginModal');
+const loginBtn = document.getElementById('loginBtn');
+const closeBtn = document.querySelector('.close');
+
+// Deals Modal Elements
+const dealsModal = document.getElementById('dealsModal');
+const dealsBtn = document.getElementById('dealsBtn');
+const closeDealsBtn = document.getElementById('closeDeals');
+
 
 // State
 let currentSlide = 0;
 let userLocation = null;
 let currentLoginType = 'user';
 let products = [];
+let deals = [];
 
 // Slider Logic
 function nextSlide() {
@@ -51,11 +63,33 @@ function checkLocation() {
     }
 }
 
-// Modal Logic
-loginBtn.onclick = () => loginModal.style.display = "flex";
-closeBtn.onclick = () => loginModal.style.display = "none";
-window.onclick = (e) => {
-    if (e.target == loginModal) loginModal.style.display = "none";
+// --- Modal Logic ---
+loginBtn.onclick = function (e) {
+    e.preventDefault();
+    loginModal.style.display = "flex";
+}
+
+closeBtn.onclick = function () {
+    loginModal.style.display = "none";
+}
+
+// Deals Modal Logic
+dealsBtn.onclick = function (e) {
+    e.preventDefault();
+    dealsModal.style.display = "flex";
+}
+
+closeDealsBtn.onclick = function () {
+    dealsModal.style.display = "none";
+}
+
+window.onclick = function (event) {
+    if (event.target == loginModal) {
+        loginModal.style.display = "none";
+    }
+    if (event.target == dealsModal) {
+        dealsModal.style.display = "none";
+    }
 }
 
 // Login Tab Logic
@@ -284,6 +318,40 @@ window.setSearchCategory = (categoryName) => {
     }
 };
 
+// Render Deals dynamically
+function renderDealsCards(dealsToRender) {
+    const dealsGrid = document.querySelector('.deals-grid');
+    if (!dealsGrid) return;
+
+    if (!dealsToRender || dealsToRender.length === 0) {
+        dealsGrid.innerHTML = '<p style="color:white; text-align:center; width:100%; grid-column: 1 / -1;">No active deals at the moment. Please check back later!</p>';
+        return;
+    }
+
+    dealsGrid.innerHTML = dealsToRender.map(deal => {
+        const whatsappLink = deal.whatsapp ? `https://wa.me/${deal.whatsapp.replace(/[^0-9]/g, '')}` : '#';
+
+        return `
+        <div class="deal-card">
+            ${deal.badge ? `<div class="deal-badge">${deal.badge}</div>` : ''}
+            <img src="${deal.image}" alt="${deal.name}">
+            <div class="deal-info">
+                <h3>${deal.name}</h3>
+                <p class="deal-desc">${deal.desc || ''}</p>
+                <div class="deal-price-loc">
+                    <span class="deal-price">${deal.price || ''}</span>
+                    <span class="deal-location"><i class="fa-solid fa-location-dot"></i> ${deal.location || ''}</span>
+                </div>
+                <div class="deal-actions">
+                    ${deal.whatsapp ? `<a href="${whatsappLink}" target="_blank" class="btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Chat</a>` : ''}
+                    ${deal.video ? `<a href="${deal.video}" target="_blank" class="btn-video"><i class="fa-brands fa-tiktok"></i> Video</a>` : ''}
+                </div>
+            </div>
+        </div>
+        `;
+    }).join('');
+}
+
 // Init
 async function init() {
     checkLocation();
@@ -292,10 +360,18 @@ async function init() {
     if (productsSection) productsSection.style.display = 'none';
 
     try {
-        products = await DataService.getProducts();
+        const [loadedProducts, loadedDeals] = await Promise.all([
+            DataService.getProducts(),
+            DataService.getDeals()
+        ]);
+
+        products = loadedProducts;
+        deals = loadedDeals;
+
         initSearchDropdowns();
+        renderDealsCards(deals);
     } catch (error) {
-        console.error("Failed to load products:", error);
+        console.error("Failed to load initial data:", error);
     }
 }
 

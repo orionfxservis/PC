@@ -5,7 +5,7 @@
 
 const DataService = {
     // ⚠️ CRITICAL: Replace this URL with your NEW DEPLOYMENT Web App URL from Google!
-    API_URL: 'https://script.google.com/macros/s/AKfycbybHovvVvCns41k7vDk9_xG4c-i7_7aB-4U-wF-9B6s/dev',
+    API_URL: 'https://script.google.com/macros/s/AKfycbzwzrDrmXt32EEqR213HnxJ_frHznbTjlE6OQzOpAp_414mcd-Bh9RqGRsausAlvINl/exec',
 
     // --- Helpers ---
 
@@ -75,6 +75,17 @@ const DataService = {
 
     saveBanners: async (banners) => {
         const res = await DataService._fetchPOST('saveBanners', banners);
+        return res.message;
+    },
+
+    // --- Deals of the Day ---
+
+    getDeals: async () => {
+        return await DataService._fetchGET('getDeals');
+    },
+
+    saveDeals: async (deals) => {
+        const res = await DataService._fetchPOST('saveDeals', deals);
         return res.message;
     },
 

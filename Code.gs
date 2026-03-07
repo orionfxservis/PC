@@ -24,6 +24,8 @@ function doGet(e) {
       return createJsonResponse(getCategories());
     case 'getBanners':
       return createJsonResponse(getBanners());
+    case 'getDeals':
+      return createJsonResponse(getDeals());
     case 'getUsers':
       return createJsonResponse(getUsers());
     default:
@@ -49,6 +51,8 @@ function doPost(e) {
       return createJsonResponse({ message: saveCategories(payload) });
     case 'saveBanners':
       return createJsonResponse({ message: saveBanners(payload) });
+    case 'saveDeals':
+      return createJsonResponse({ message: saveDeals(payload) });
     case 'saveUsers':
         return createJsonResponse({ message: saveUsers(payload) });
     case 'login':
@@ -186,6 +190,15 @@ function saveBanners(banners) {
   return 'Success';
 }
 
+function getDeals() {
+  return getData('Deals');
+}
+
+function saveDeals(deals) {
+  saveData('Deals', deals);
+  return 'Success';
+}
+
 function getUsers() {
     return getData('Users');
 }
@@ -197,7 +210,7 @@ function saveUsers(users) {
 
 // --- Setup ---
 function setupSheets() {
-  ['Categories', 'Products', 'Banners', 'Users'].forEach(sheetName => getSheet(sheetName));
+  ['Categories', 'Products', 'Banners', 'Deals', 'Users'].forEach(sheetName => getSheet(sheetName));
 }
 
 function loginUser(username, password, type) {

@@ -5,7 +5,7 @@
 
 const DataService = {
     // ⚠️ CRITICAL: Replace this URL with your NEW DEPLOYMENT Web App URL from Google!
-    API_URL: 'https://script.google.com/macros/s/AKfycbzwzrDrmXt32EEqR213HnxJ_frHznbTjlE6OQzOpAp_414mcd-Bh9RqGRsausAlvINl/exec',
+    API_URL: 'https://script.google.com/macros/s/AKfycbxInVbxYtkzS-Mlp4c3Iw1SIDTG1RSHzwG7za01VY6ZZZcjifFG5efaTD2jN9ZptoeQ/exec',
 
     // --- Helpers ---
 
@@ -27,7 +27,7 @@ const DataService = {
             const response = await fetch(DataService.API_URL, {
                 method: 'POST',
                 // Using text/plain avoids some CORS preflight issues with Google Apps Script
-                headers: { 'Content-Type': 'text/plain' }, 
+                headers: { 'Content-Type': 'text/plain' },
                 body: JSON.stringify({ action: action, payload: payload })
             });
             if (!response.ok) throw new Error('Network response was not ok');
@@ -75,6 +75,17 @@ const DataService = {
 
     saveBanners: async (banners) => {
         const res = await DataService._fetchPOST('saveBanners', banners);
+        return res.message;
+    },
+
+    // --- Deals of the Day ---
+
+    getDeals: async () => {
+        return await DataService._fetchGET('getDeals');
+    },
+
+    saveDeals: async (deals) => {
+        const res = await DataService._fetchPOST('saveDeals', deals);
         return res.message;
     },
 
