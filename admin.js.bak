@@ -296,7 +296,7 @@ const dealImageInput = document.getElementById('dealImage');
 const uploadStatus = document.getElementById('uploadStatus');
 
 // Free temporary API Key for ImgBB. In a real production app this should be secured.
-const IMGBB_API_KEY = '328874a9e722a65d5a57e520cf0d549c';
+const IMGBB_API_KEY = '37e16d4ae04cd07fa73335534d0b1626';
 
 if (dealImageUpload) {
     dealImageUpload.addEventListener('change', async function () {
