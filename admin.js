@@ -339,6 +339,51 @@ if (dealImageUpload) {
     });
 }
 
+// Product Image Upload Logic
+const prodImageUpload = document.getElementById('prodImageUpload');
+const prodImageInput = document.getElementById('prodImage');
+const prodUploadStatus = document.getElementById('prodUploadStatus');
+
+if (prodImageUpload) {
+    prodImageUpload.addEventListener('change', async function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        prodUploadStatus.style.display = 'inline-block';
+        prodUploadStatus.textContent = 'Uploading...';
+        prodImageInput.disabled = true;
+
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                prodImageInput.value = data.data.url;
+                prodUploadStatus.textContent = 'Upload successful!';
+                prodUploadStatus.style.color = '#2ecc71';
+            } else {
+                throw new Error(data.error.message);
+            }
+        } catch (error) {
+            console.error('Upload Error:', error);
+            prodUploadStatus.textContent = 'Upload failed.';
+            prodUploadStatus.style.color = '#e74c3c';
+            alert('Failed to upload image: ' + error.message);
+        } finally {
+            prodImageInput.disabled = false;
+            this.value = '';
+            setTimeout(() => { prodUploadStatus.style.display = 'none'; }, 3000);
+        }
+    });
+}
+
 if (dealForm) {
     dealForm.addEventListener('submit', async (e) => {
         e.preventDefault();

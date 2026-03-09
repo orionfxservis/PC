@@ -55,8 +55,16 @@
                         </div>
 
                         <div class="input-group">
-                            <label>Image URL</label>
-                            <input type="url" id="prodImage" placeholder="https://example.com/image.jpg">
+                            <label>Image</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="url" id="prodImage" placeholder="https://..." style="flex: 1;">
+                                <input type="file" id="prodImageUpload" accept="image/*" style="display: none;">
+                                <button type="button" class="btn btn-secondary"
+                                    onclick="document.getElementById('prodImageUpload').click()"
+                                    style="padding: 10px 15px;"><i class="fa-solid fa-upload"></i></button>
+                            </div>
+                            <span id="prodUploadStatus"
+                                style="font-size: 0.8rem; color: var(--accent-color); margin-top: 5px; display: none;">Uploading...</span>
                         </div>
 
                         <!-- Dynamic Fields specific to category injected here -->
