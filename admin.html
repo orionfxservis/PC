@@ -174,7 +174,7 @@
             <section id="deals" class="admin-section">
                 <h1>Manage Deals of the Day</h1>
                 <div class="form-container">
-                    <h3>Add New Deal</h3>
+                    <h3 id="dealFormTitle">Add New Deal</h3>
                     <form id="dealForm">
                         <div class="form-row">
                             <div class="input-group">
@@ -216,7 +216,11 @@
                                 <input type="url" id="dealVideo" placeholder="https://tiktok.com/...">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Add Deal</button>
+                        <div class="form-actions" style="margin-top: 15px;">
+                            <button type="submit" class="btn btn-primary" id="btnSaveDeal">Add Deal</button>
+                            <button type="button" class="btn btn-secondary" id="btnCancelDeal" style="display:none;"
+                                onclick="cancelDealEdit()">Cancel Edit</button>
+                        </div>
                     </form>
                 </div>
 

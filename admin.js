@@ -8,6 +8,7 @@ let deals = [];
 let users = [];
 let editIndex = -1; // State to track editing
 let userEditIndex = -1; // State to track user editing
+let dealEditIndex = -1; // State to track deal editing
 
 // DOM Elements
 const categoryForm = document.getElementById('categoryForm');
@@ -224,6 +225,9 @@ if (bannerForm) {
 // --- Deals Functions ---
 const dealForm = document.getElementById('dealForm');
 const dealList = document.getElementById('dealList');
+const dealFormTitle = document.getElementById('dealFormTitle');
+const btnCancelDeal = document.getElementById('btnCancelDeal');
+const btnSaveDeal = document.getElementById('btnSaveDeal');
 
 async function saveDeals() {
     await DataService.saveDeals(deals);
@@ -233,7 +237,7 @@ async function saveDeals() {
 function renderDeals() {
     if (!dealList) return;
     dealList.innerHTML = deals.map((deal, index) => `
-        <div class="product-row" style="grid-template-columns: 80px 2fr 1fr 80px;">
+        <div class="product-row" style="grid-template-columns: 80px 2fr 1fr 100px;">
             <img src="${deal.image}" alt="${deal.name}" style="width: 100%; height: 60px; object-fit: cover; border-radius: 8px;">
             <div>
                 <strong>${deal.name}</strong> <span class="badge" style="background:#ff4757; color:white; padding:2px 6px; font-size:0.7rem; border-radius:10px;">${deal.badge}</span><br>
@@ -244,6 +248,7 @@ function renderDeals() {
                 <small><i class="fa-solid fa-location-dot"></i> ${deal.location}</small>
             </div>
             <div>
+                <button class="edit-btn" onclick="editDeal(${index})"><i class="fa-solid fa-pen"></i></button>
                 <button class="delete-btn" onclick="deleteDeal(${index})"><i class="fa-solid fa-trash"></i></button>
             </div>
         </div>
@@ -257,12 +262,40 @@ async function deleteDeal(index) {
     }
 }
 
+window.editDeal = (index) => {
+    dealEditIndex = index;
+    const deal = deals[index];
+
+    document.getElementById('dealName').value = deal.name;
+    document.getElementById('dealBadge').value = deal.badge;
+    document.getElementById('dealImage').value = deal.image;
+    document.getElementById('dealDesc').value = deal.desc;
+    document.getElementById('dealPrice').value = deal.price;
+    document.getElementById('dealLocation').value = deal.location;
+    document.getElementById('dealWhatsapp').value = deal.whatsapp;
+    document.getElementById('dealVideo').value = deal.video || '';
+
+    if (dealFormTitle) dealFormTitle.textContent = "Edit Deal";
+    if (btnSaveDeal) btnSaveDeal.textContent = "Update Deal";
+    if (btnCancelDeal) btnCancelDeal.style.display = 'inline-block';
+
+    document.getElementById('deals').querySelector('.form-container').scrollIntoView({ behavior: 'smooth' });
+};
+
+window.cancelDealEdit = () => {
+    dealEditIndex = -1;
+    dealForm.reset();
+    if (dealFormTitle) dealFormTitle.textContent = "Add New Deal";
+    if (btnSaveDeal) btnSaveDeal.textContent = "Add Deal";
+    if (btnCancelDeal) btnCancelDeal.style.display = 'none';
+};
+
 if (dealForm) {
     dealForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const newDeal = {
-            id: Date.now(),
+            id: dealEditIndex === -1 ? Date.now() : deals[dealEditIndex].id,
             name: document.getElementById('dealName').value,
             badge: document.getElementById('dealBadge').value,
             image: document.getElementById('dealImage').value,
@@ -273,10 +306,16 @@ if (dealForm) {
             video: document.getElementById('dealVideo').value
         };
 
-        deals.push(newDeal);
+        if (dealEditIndex === -1) {
+            deals.push(newDeal);
+        } else {
+            deals[dealEditIndex] = newDeal;
+            cancelDealEdit();
+        }
+
         await saveDeals();
-        dealForm.reset();
-        alert('Deal added successfully!');
+        if (dealEditIndex === -1) dealForm.reset();
+        alert('Deal saved successfully!');
     });
 }
 
