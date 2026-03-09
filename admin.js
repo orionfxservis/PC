@@ -290,6 +290,55 @@ window.cancelDealEdit = () => {
     if (btnCancelDeal) btnCancelDeal.style.display = 'none';
 };
 
+// ImgBB Upload Logic
+const dealImageUpload = document.getElementById('dealImageUpload');
+const dealImageInput = document.getElementById('dealImage');
+const uploadStatus = document.getElementById('uploadStatus');
+
+// Free temporary API Key for ImgBB. In a real production app this should be secured.
+const IMGBB_API_KEY = '37e16d4ae04cd07fa73335534d0b1626';
+
+if (dealImageUpload) {
+    dealImageUpload.addEventListener('change', async function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        uploadStatus.style.display = 'inline-block';
+        uploadStatus.textContent = 'Uploading...';
+        dealImageInput.disabled = true;
+
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                dealImageInput.value = data.data.url;
+                uploadStatus.textContent = 'Upload successful!';
+                uploadStatus.style.color = '#2ecc71';
+            } else {
+                throw new Error(data.error.message);
+            }
+        } catch (error) {
+            console.error('Upload Error:', error);
+            uploadStatus.textContent = 'Upload failed.';
+            uploadStatus.style.color = '#e74c3c';
+            alert('Failed to upload image: ' + error.message);
+        } finally {
+            dealImageInput.disabled = false;
+            // Clear input so same file can be selected again
+            this.value = '';
+            setTimeout(() => { uploadStatus.style.display = 'none'; }, 3000);
+        }
+    });
+}
+
 if (dealForm) {
     dealForm.addEventListener('submit', async (e) => {
         e.preventDefault();

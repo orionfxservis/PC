@@ -188,8 +188,17 @@
                         </div>
                         <div class="form-row">
                             <div class="input-group">
-                                <label>Image URL</label>
-                                <input type="url" id="dealImage" placeholder="https://example.com/image.jpg" required>
+                                <label>Image URL or Upload</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="url" id="dealImage" placeholder="https://..." required
+                                        style="flex: 1;">
+                                    <input type="file" id="dealImageUpload" accept="image/*" style="display: none;">
+                                    <button type="button" class="btn btn-secondary"
+                                        onclick="document.getElementById('dealImageUpload').click()"
+                                        style="padding: 10px 15px;"><i class="fa-solid fa-upload"></i></button>
+                                </div>
+                                <span id="uploadStatus"
+                                    style="font-size: 0.8rem; color: var(--accent-color); margin-top: 5px; display: none;">Uploading...</span>
                             </div>
                             <div class="input-group">
                                 <label>Short Description</label>
