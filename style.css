@@ -127,8 +127,8 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(255, 71, 87, 0.15);
-    /* lighter inner */
+    background: rgba(255, 71, 87, 0.7);
+    /* lighter inner, increased opacity */
     color: #fff !important;
     font-size: 1rem;
     font-weight: 400 !important;
@@ -137,15 +137,15 @@ body {
     border-radius: 25px;
     text-decoration: none;
     margin-top: 25px;
-    border: 1px solid rgba(255, 71, 87, 0.8);
+    border: 1px solid rgba(255, 71, 87, 1);
     /* pink outline */
     transition: all 0.3s ease;
 }
 
 .deal-hero-btn:hover {
     transform: translateY(-3px) scale(1.03);
-    background: rgba(255, 71, 87, 0.25);
-    box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+    background: rgba(255, 71, 87, 0.9);
+    box-shadow: 0 4px 15px rgba(255, 71, 87, 0.8);
 }
 
 .deal-hero-btn i {
