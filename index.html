@@ -21,6 +21,8 @@
         <div class="nav-links">
             <a href="#" class="active">Home</a>
             <a href="#products">Products</a>
+            <a href="#blog">Blog</a>
+            <a href="#contact">Contact Us</a>
             <a href="#about">About</a>
         </div>
         <div class="auth-buttons">
@@ -144,6 +146,97 @@
             <!-- Products will be injected here -->
         </div>
     </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="blog-section">
+        <h2>Latest From Our Blog</h2>
+        <div class="blog-grid">
+            <div class="blog-card">
+                <img src="https://images.unsplash.com/photo-1512418490979-92798eb17292?q=80&w=800&auto=format&fit=crop"
+                    alt="Blog 1">
+                <div class="blog-info">
+                    <span class="blog-date">March 10, 2026</span>
+                    <h3>How to Master Price Comparison</h3>
+                    <p>Learn the top secrets to always getting the best deals online in Pakistan without getting
+                        scammed.</p>
+                    <a href="#" class="btn-read-more">Read More <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="blog-card">
+                <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=800&auto=format&fit=crop"
+                    alt="Blog 2">
+                <div class="blog-info">
+                    <span class="blog-date">March 05, 2026</span>
+                    <h3>Top 5 Laptops for Students</h3>
+                    <p>A comprehensive guide to the best budget-friendly laptops available in the market right now.</p>
+                    <a href="#" class="btn-read-more">Read More <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="blog-card">
+                <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=800&auto=format&fit=crop"
+                    alt="Blog 3">
+                <div class="blog-info">
+                    <span class="blog-date">February 28, 2026</span>
+                    <h3>Is Buying Used Cars Worth It?</h3>
+                    <p>Dive deep into the pros and cons of purchasing used vehicles in the current economic landscape.
+                    </p>
+                    <a href="#" class="btn-read-more">Read More <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="contact-container">
+            <h2>Contact Us</h2>
+            <p class="contact-subtitle">Have questions or want to list your business? Drop us a message!</p>
+
+            <form id="contactForm" class="contact-form">
+                <div class="form-row">
+                    <div class="input-group">
+                        <label for="contactName">Name</label>
+                        <input type="text" id="contactName" placeholder="Your Name" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="contactEmail">Email</label>
+                        <input type="email" id="contactEmail" placeholder="Your Email" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="contactSubject">Subject</label>
+                    <input type="text" id="contactSubject" placeholder="What is this regarding?" required>
+                </div>
+                <div class="input-group">
+                    <label for="contactMessage">Message</label>
+                    <textarea id="contactMessage" rows="5" placeholder="Your message here..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+            </form>
+
+            <div class="contact-social">
+                <h3>Connect With Us</h3>
+                <div class="social-icons">
+                    <a href="#" target="_blank" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="about">
+        <div class="footer-content" style="justify-content: center; text-align: center; flex-direction: column;">
+            <div class="footer-logo">
+                <h3 class="logo" style="font-size: 1.8rem; justify-content: center; display: flex;">Qeemat Point</h3>
+                <p style="margin: 10px auto 0;">Your trusted guide to finding the best prices across Pakistan.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Qeemat Point. All rights reserved.</p>
+        </div>
+    </footer>
 
     <!-- Deal of the Day Modal -->
     <div id="dealsModal" class="modal deals-modal">
