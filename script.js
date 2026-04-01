@@ -23,6 +23,17 @@ const dealsModal = document.getElementById('dealsModal');
 const dealsBtn = document.getElementById('dealsBtn');
 const closeDealsBtn = document.getElementById('closeDeals');
 
+// Order Modal Elements
+const orderModal = document.getElementById('orderModal');
+const closeOrderBtn = document.getElementById('closeOrder');
+const orderForm = document.getElementById('orderForm');
+const orderQty = document.getElementById('orderQty');
+const orderPrice = document.getElementById('orderPrice');
+const orderTotal = document.getElementById('orderTotal');
+const orderDateTime = document.getElementById('orderDateTime');
+const orderProductName = document.getElementById('orderProductName');
+const orderVendorWhatsapp = document.getElementById('orderVendorWhatsapp');
+
 
 // State
 let currentSlide = 0;
@@ -83,6 +94,12 @@ closeDealsBtn.onclick = function () {
     dealsModal.style.display = "none";
 }
 
+if (closeOrderBtn) {
+    closeOrderBtn.onclick = function () {
+        orderModal.style.display = "none";
+    }
+}
+
 window.onclick = function (event) {
     if (event.target == loginModal) {
         loginModal.style.display = "none";
@@ -90,6 +107,80 @@ window.onclick = function (event) {
     if (event.target == dealsModal) {
         dealsModal.style.display = "none";
     }
+    if (event.target == orderModal) {
+        orderModal.style.display = "none";
+    }
+}
+
+// Order Logic
+window.openOrderModal = (name, price, whatsappUrl) => {
+    if (!orderModal) return;
+    orderModal.style.display = "flex";
+
+    // Auto fill Date & Time
+    const now = new Date();
+    orderDateTime.value = now.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+
+    // Auto fill Product
+    orderProductName.value = name;
+
+    // Extract numeric price
+    const numericPrice = parseFloat(price.toString().replace(/,/g, '').replace(/Rs\.?\s*/i, ''));
+    orderPrice.value = isNaN(numericPrice) ? 0 : numericPrice;
+    orderQty.value = 1;
+
+    orderVendorWhatsapp.value = whatsappUrl || '';
+
+    window.calculateOrderTotal();
+}
+
+window.calculateOrderTotal = () => {
+    const qty = parseInt(orderQty.value) || 1;
+    const price = parseFloat(orderPrice.value) || 0;
+    const total = qty * price;
+    orderTotal.innerText = `Rs. ${total.toLocaleString()}`;
+}
+
+if (orderQty) {
+    orderQty.addEventListener('input', window.calculateOrderTotal);
+}
+
+if (orderForm) {
+    orderForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById('orderPersonName').value;
+        const contact = document.getElementById('orderContactNo').value;
+        const userWhatsapp = document.getElementById('orderWhatsappNo').value;
+        const address = document.getElementById('orderAddress').value;
+
+        const pName = orderProductName.value;
+        const pQty = orderQty.value;
+        const pTotal = orderTotal.innerText;
+
+        const msg = `*New Order Alert* 📦\n\n*Product:* ${pName}\n*Quantity:* ${pQty}\n*Total Price:* ${pTotal}\n\n*Customer Details:*\n*Name:* ${name}\n*Contact:* ${contact}\n*WhatsApp:* ${userWhatsapp}\n*Delivery Address:* ${address}`;
+
+        const vendorWhatsapp = orderVendorWhatsapp.value;
+        const adminPhone = '9233330360487'; // Main Admin WhatsApp No
+        const adminUrl = 'https://wa.me/' + adminPhone + '?text=' + encodeURIComponent(msg);
+
+        if (vendorWhatsapp && vendorWhatsapp !== '#') {
+            const vendorUrl = vendorWhatsapp + '?text=' + encodeURIComponent(msg);
+
+            // Open Vendor WhatsApp
+            window.open(vendorUrl, '_blank');
+
+            // Open Admin WhatsApp after a short delay
+            setTimeout(() => {
+                window.open(adminUrl, '_blank');
+            }, 800);
+        } else {
+            // If no vendor, just send to admin
+            window.open(adminUrl, '_blank');
+        }
+        orderModal.style.display = 'none';
+        orderForm.reset();
+    });
 }
 
 // Login Tab Logic
@@ -149,7 +240,7 @@ function renderProducts(productsToRender) {
     }
 
     productsSection.style.display = 'block';
-    productGrid.innerHTML = productsToRender.map(product => {
+    productGrid.innerHTML = productsToRender.map((product, index) => {
         let details = product.subCategory || '';
         if (product.category === 'Vehicles' || product.category === 'Vehicle') {
             details = `${product.year || ''} Model ${product.condition ? '(' + product.condition + ')' : ''} | ${product.kMs || product.kms || 0} km`;
@@ -159,13 +250,24 @@ function renderProducts(productsToRender) {
             details += ` - ${product.variety}`;
         }
 
+        const badge = index % 2 === 0 ? '🔥 Lowest Price' : '🔥 Hot Deal';
+        const imgUrl = product.image && product.image.trim() !== '' ? product.image : 'images/product.jpg';
+        const loc = product.location ? `📍 ${product.location}` : '📍 Available Now';
+        const whatsappUrl = product.whatsapp ? 'https://wa.me/' + product.whatsapp.toString().replace(/[^0-9]/g, '') : '#';
+        const displayedName = product.variety ? product.name + ' - ' + product.variety : product.name;
+        const safeName = displayedName.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
         return `
         <div class="product-card">
-            <img src="${product.image}" alt="${product.name}">
-            <div class="product-info">
-                <h3>${product.name}</h3>
-                <p style="font-size: 0.9em; color: #666; margin-bottom: 5px;">${details}</p>
-                <p class="price">Rs. ${product.price}</p>
+            <div class="badge">${badge}</div>
+            <img src="${imgUrl}" alt="${product.name}">
+            <h3>${displayedName}</h3>
+            <p class="price">Rs. ${product.price}</p>
+            <p class="location">${loc}</p>
+            <p class="update">🕒 ${details || 'Recent Update'}</p>
+            <div class="buttons">
+                <button class="compare-btn">Compare</button>
+                <button class="whatsapp-btn" onclick="openOrderModal('${safeName}', '${product.price}', '${whatsappUrl}')">Order Now</button>
             </div>
         </div>
         `;

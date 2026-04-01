@@ -240,7 +240,7 @@ function renderDeals() {
         <div class="product-row" style="grid-template-columns: 80px 2fr 1fr 100px;">
             <img src="${deal.image}" alt="${deal.name}" style="width: 100%; height: 60px; object-fit: cover; border-radius: 8px;">
             <div>
-                <strong>${deal.name}</strong> <span class="badge" style="background:#ff4757; color:white; padding:2px 6px; font-size:0.7rem; border-radius:10px;">${deal.badge}</span><br>
+                <strong>${deal.name}</strong><br>
                 <small style="color: #aaa;">${deal.desc}</small>
             </div>
             <div>
@@ -266,13 +266,12 @@ window.editDeal = (index) => {
     dealEditIndex = index;
     const deal = deals[index];
 
-    document.getElementById('dealName').value = deal.name;
-    document.getElementById('dealBadge').value = deal.badge;
-    document.getElementById('dealImage').value = deal.image;
-    document.getElementById('dealDesc').value = deal.desc;
-    document.getElementById('dealPrice').value = deal.price;
-    document.getElementById('dealLocation').value = deal.location;
-    document.getElementById('dealWhatsapp').value = deal.whatsapp;
+    document.getElementById('dealName').value = deal.name || '';
+    document.getElementById('dealImage').value = deal.image || '';
+    document.getElementById('dealDesc').value = deal.desc || '';
+    document.getElementById('dealPrice').value = deal.price || '';
+    document.getElementById('dealLocation').value = deal.location || '';
+    document.getElementById('dealWhatsapp').value = deal.whatsapp || '';
     document.getElementById('dealVideo').value = deal.video || '';
 
     if (dealFormTitle) dealFormTitle.textContent = "Edit Deal";
@@ -391,7 +390,6 @@ if (dealForm) {
         const newDeal = {
             id: dealEditIndex === -1 ? Date.now() : deals[dealEditIndex].id,
             name: document.getElementById('dealName').value,
-            badge: document.getElementById('dealBadge').value,
             image: document.getElementById('dealImage').value,
             desc: document.getElementById('dealDesc').value,
             price: document.getElementById('dealPrice').value,
@@ -517,9 +515,11 @@ function logout() {
 
 // Init
 // Init
+// Init
 window.addEventListener('load', initAdmin);
 
 // --- Product Functions ---
+let productEditIndex = -1;
 
 function populateCategoryDropdown() {
     const prodCategorySelect = document.getElementById('prodCategory');
@@ -898,11 +898,11 @@ if (adminProductForm) {
         const subCategory = document.getElementById('prodSubCategory').value;
 
         let newProduct = {
-            id: Date.now(),
+            id: productEditIndex === -1 ? Date.now() : products[productEditIndex].id,
             category: category,
             subCategory: subCategory,
-            image: document.getElementById('prodImage').value || 'https://via.placeholder.com/150',
-            addedBy: 'Admin'
+            image: document.getElementById('prodImage').value || (productEditIndex !== -1 ? products[productEditIndex].image : 'https://via.placeholder.com/150'),
+            addedBy: productEditIndex === -1 ? 'Admin' : (products[productEditIndex].addedBy || 'Admin')
         };
 
         // Extract native dynamic field values
@@ -930,18 +930,28 @@ if (adminProductForm) {
         }
 
         try {
-            products.push(newProduct);
+            if (productEditIndex === -1) {
+                products.push(newProduct);
+            } else {
+                products[productEditIndex] = newProduct;
+                cancelProductEdit();
+            }
             await DataService.saveProducts(products);
 
-            alert('Product Added Successfully!');
+            if (productEditIndex === -1) {
+                alert('Product Added Successfully!');
+            } else {
+                alert('Product Updated Successfully!');
+            }
+            
             adminProductForm.reset();
-            renderDynamicAdminFields(); // Reset dynamic fields
+            renderDynamicAdminFields();
             renderAdminProducts();
             updateUI(); // Update stats
         } catch (error) {
             alert('Failed to save product. Check internet connection or Google Script logs.');
             console.error('Save product error:', error);
-            products.pop(); // Remove the failed product locally
+            if (productEditIndex === -1) products.pop(); // Remove the failed product locally
         }
     });
 }
@@ -964,6 +974,7 @@ function renderAdminProducts() {
                 <div>${prod.category} <br> <small>${prod.subCategory}</small></div>
                 <div style="color: var(--primary-color)">Rs. ${prod.price}</div>
                 <div>
+                   <button class="edit-btn" onclick="editProduct(${index})"><i class="fa-solid fa-pen"></i></button>
                    <button class="delete-btn" onclick="deleteProduct(${index})"><i class="fa-solid fa-trash"></i></button>
                 </div>
             </div>
@@ -981,3 +992,88 @@ window.deleteProduct = async (index) => {
     }
 };
 
+window.editProduct = (index) => {
+    productEditIndex = index;
+    const prod = products[index];
+
+    const pCat = document.getElementById('prodCategory');
+    const pSub = document.getElementById('prodSubCategory');
+
+    pCat.value = prod.category;
+    // Trigger change to populate subcategories
+    pCat.dispatchEvent(new Event('change'));
+
+    setTimeout(() => {
+        pSub.value = prod.subCategory;
+        // Trigger change to populate dynamic fields
+        pSub.dispatchEvent(new Event('change'));
+
+        setTimeout(() => {
+            document.getElementById('prodImage').value = prod.image || '';
+
+            // Fill dynamic fields
+            document.querySelectorAll('.dynamic-admin-field').forEach(field => {
+                let key = field.id.replace('prod', '');
+                key = key.charAt(0).toLowerCase() + key.slice(1);
+                
+                if (prod[key] !== undefined) {
+                    field.value = prod[key];
+                }
+            });
+
+            // Handle checkboxes for vehicles if needed
+            if (prod.category === 'Vehicles' || prod.category === 'Vehicle') {
+                if (prod.features) {
+                    const featureArray = prod.features.split(',').map(s => s.trim());
+                    document.querySelectorAll('.feature-cb').forEach(cb => {
+                        cb.checked = featureArray.includes(cb.value);
+                    });
+                }
+                if (prod.mechanicalDetails) {
+                    const mechArray = prod.mechanicalDetails.split(',').map(s => s.trim());
+                    document.querySelectorAll('.mech-cb').forEach(cb => {
+                        cb.checked = mechArray.includes(cb.value);
+                    });
+                }
+            }
+
+            // Update UI buttons
+            const submitBtn = document.querySelector('#adminProductForm button[type="submit"]');
+            if (submitBtn) submitBtn.textContent = 'Update Product';
+            
+            let cancelBtn = document.getElementById('btnCancelProduct');
+            if (!cancelBtn) {
+                cancelBtn = document.createElement('button');
+                cancelBtn.type = 'button';
+                cancelBtn.id = 'btnCancelProduct';
+                cancelBtn.className = 'btn btn-secondary';
+                cancelBtn.style.marginTop = '10px';
+                cancelBtn.style.marginLeft = '10px';
+                cancelBtn.textContent = 'Cancel Edit';
+                cancelBtn.onclick = cancelProductEdit;
+                submitBtn.parentNode.insertBefore(cancelBtn, submitBtn.nextSibling);
+            }
+            cancelBtn.style.display = 'inline-block';
+
+            document.getElementById('products').querySelector('.form-container').scrollIntoView({ behavior: 'smooth' });
+        }, 50);
+    }, 50);
+};
+
+window.cancelProductEdit = () => {
+    productEditIndex = -1;
+    const form = document.getElementById('adminProductForm');
+    if (form) form.reset();
+    
+    const pCat = document.getElementById('prodCategory');
+    if (pCat) {
+        pCat.value = "";
+        pCat.dispatchEvent(new Event('change'));
+    }
+    
+    const submitBtn = document.querySelector('#adminProductForm button[type="submit"]');
+    if (submitBtn) submitBtn.textContent = 'Add Product';
+    
+    const cancelBtn = document.getElementById('btnCancelProduct');
+    if (cancelBtn) cancelBtn.style.display = 'none';
+};

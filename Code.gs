@@ -216,7 +216,7 @@ function setupSheets() {
 function loginUser(username, password, type) {
     setupSheets();
     const users = getUsers();
-    const user = users.find(u => u.username === username && u.password === password && u.role === type);
+    const user = users.find(u => String(u.username) === String(username) && String(u.password) === String(password) && String(u.role) === String(type));
     if (user) {
         if (user.status === 'hold') {
             return { success: false, message: 'Account is on hold. Please contact support.' };
